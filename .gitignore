@@ -1,0 +1,15 @@
+node_modules
+.next
+dist
+coverage
+artifacts
+cache
+types
+pnpm-lock.yaml
+.env
+.env.local
+.turbo
+fhevmTemp
+.tmp-fhevm-template
+.tmp-pkg
+*.tgz
