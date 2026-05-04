@@ -82,7 +82,7 @@ export default async function TenderDetailPage({ params }: { params: Promise<{ a
       </section>
       <section className="space-y-6">
         <SubmitBidForm tenderAddress={tenderAddress} isOpen={isOpen} />
-        <IssuerActions canClose={!tender.closed} />
+        <IssuerActions tenderAddress={tenderAddress} canClose={!tender.closed} canReveal={tender.closed && !tender.revealRequested} canFinalize={tender.revealRequested && !tender.finalized} />
         {tender.finalized ? <ResultCard winner={tender.winner} winningBid={tender.winningBid} /> : null}
       </section>
     </div>
