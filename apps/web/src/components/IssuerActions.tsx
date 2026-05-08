@@ -54,25 +54,25 @@ export function IssuerActions({
   }
 
   return (
-    <div className="rounded-[2rem] border border-white/10 bg-white/5 p-6">
-      <div className="mb-4 text-sm text-slate-300">Issuer controls the close, reveal, and finalization flow. Losing bids stay encrypted even after the result is finalized.</div>
+    <div className="neo-surface rounded-[2.25rem] p-6">
+      <div className="mb-4 text-sm text-[color:var(--muted)]">Close. reveal. finalize.</div>
       <div className="flex flex-wrap gap-3">
-        <button disabled={!canClose} onClick={closeTender} className="rounded-2xl bg-slate-200 px-4 py-3 text-sm font-medium text-slate-950 disabled:opacity-50">
+        <button disabled={!canClose} onClick={closeTender} className="neo-pill rounded-[1.5rem] px-4 py-3 text-sm font-medium text-[color:var(--copy)] disabled:opacity-50">
           Close Tender
         </button>
-        <button disabled={!canReveal} onClick={requestReveal} className="rounded-2xl bg-amber-300 px-4 py-3 text-sm font-medium text-slate-950 disabled:opacity-50">
-          Request Reveal
+        <button disabled={!canReveal} onClick={requestReveal} className="neo-pill rounded-[1.5rem] px-4 py-3 text-sm font-medium text-[color:var(--copy)] disabled:opacity-50">
+          Reveal
         </button>
-        <button disabled={!canFinalize} onClick={finalizeTender} className="rounded-2xl bg-sky-400 px-4 py-3 text-sm font-medium text-slate-950 disabled:opacity-50">
-          Finalize Tender
+        <button disabled={!canFinalize} onClick={finalizeTender} className="neo-pill rounded-[1.5rem] px-4 py-3 text-sm font-medium text-[color:var(--copy)] disabled:opacity-50">
+          Finalize
         </button>
       </div>
       <div className="mt-4 flex flex-wrap gap-3">
-        <button onClick={() => writeContractAsync({ address: tenderAddress, abi: reverseTenderAbi, functionName: "claimRefund" })} className="rounded-2xl border border-white/10 px-4 py-3 text-sm">
-          Claim Refund
+        <button onClick={() => writeContractAsync({ address: tenderAddress, abi: reverseTenderAbi, functionName: "claimRefund" })} className="neo-inset rounded-[1.5rem] px-4 py-3 text-sm text-[color:var(--muted)]">
+          Refund
         </button>
-        <button onClick={() => writeContractAsync({ address: tenderAddress, abi: reverseTenderAbi, functionName: "claimAward" })} className="rounded-2xl border border-white/10 px-4 py-3 text-sm">
-          Claim Award
+        <button onClick={() => writeContractAsync({ address: tenderAddress, abi: reverseTenderAbi, functionName: "claimAward" })} className="neo-inset rounded-[1.5rem] px-4 py-3 text-sm text-[color:var(--muted)]">
+          Award
         </button>
       </div>
       <TransactionToast message={receipt.isSuccess ? "Transaction confirmed." : message} />

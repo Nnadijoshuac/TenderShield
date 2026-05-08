@@ -30,15 +30,15 @@ export function SubmitBidForm({ tenderAddress, isOpen }: { tenderAddress: `0x${s
   }
 
   return (
-    <div className="rounded-[2rem] border border-white/10 bg-white/5 p-6">
-      <div className="mb-4 text-sm text-slate-300">Only encrypted inputs leave the browser. The UI never sends a plaintext bid amount to the contract.</div>
+    <div className="neo-surface rounded-[2.25rem] p-6">
+      <div className="mb-4 text-sm text-[color:var(--muted)]">Encrypt quote. submit.</div>
       <div className="flex gap-3">
-        <input value={bidAmount} onChange={(e) => setBidAmount(e.target.value)} className="flex-1 rounded-2xl border border-white/10 bg-slate-950/50 px-4 py-3" />
-        <button disabled={!isOpen || !address} onClick={onSubmit} className="rounded-2xl bg-emerald-400 px-4 py-3 font-medium text-slate-950 disabled:opacity-50">
-          Encrypt & Submit Bid
+        <input value={bidAmount} onChange={(e) => setBidAmount(e.target.value)} className="neo-inset flex-1 rounded-[1.5rem] px-4 py-3 text-[color:var(--copy)] outline-none" />
+        <button disabled={!isOpen || !address} onClick={onSubmit} className="neo-pill rounded-[1.5rem] px-4 py-3 font-medium text-[color:var(--copy)] disabled:opacity-50">
+          Submit
         </button>
       </div>
-      <div className="mt-3 text-sm text-slate-400">{!address ? "Connect a vendor wallet to submit a bid." : "Contract can compare this bid without decrypting it."}</div>
+      <div className="mt-3 text-sm text-[color:var(--muted)]">{!address ? "Connect vendor wallet." : "Bid stays hidden."}</div>
       <TransactionToast message={receipt.isSuccess ? "Encrypted bid submitted." : message} />
     </div>
   );

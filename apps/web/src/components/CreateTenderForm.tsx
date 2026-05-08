@@ -46,26 +46,25 @@ export function CreateTenderForm() {
   }
 
   return (
-    <div className="rounded-[2rem] border border-white/10 bg-white/5 p-6">
+    <div className="neo-surface rounded-[2.5rem] p-6">
       <form action={onSubmit} className="grid gap-4">
-        <input name="title" value={title} onChange={(e) => setTitle(e.target.value)} className="rounded-2xl border border-white/10 bg-slate-950/50 px-4 py-3" />
-        <textarea name="description" value={description} onChange={(e) => setDescription(e.target.value)} className="min-h-32 rounded-2xl border border-white/10 bg-slate-950/50 px-4 py-3" />
-        <input name="deadline" type="datetime-local" value={deadline} onChange={(e) => setDeadline(e.target.value)} className="rounded-2xl border border-white/10 bg-slate-950/50 px-4 py-3" />
+        <input name="title" placeholder="Title" value={title} onChange={(e) => setTitle(e.target.value)} className="neo-inset rounded-[1.5rem] px-4 py-3 text-[color:var(--copy)] outline-none" />
+        <textarea name="description" placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)} className="neo-inset min-h-32 rounded-[1.5rem] px-4 py-3 text-[color:var(--copy)] outline-none" />
+        <input name="deadline" type="datetime-local" value={deadline} onChange={(e) => setDeadline(e.target.value)} className="neo-inset rounded-[1.5rem] px-4 py-3 text-[color:var(--copy)] outline-none" />
         <div className="grid gap-4 sm:grid-cols-2">
-          <input name="bidBond" value={bidBond} onChange={(e) => setBidBond(e.target.value)} className="rounded-2xl border border-white/10 bg-slate-950/50 px-4 py-3" />
-          <input name="maxBudget" value={maxBudget} onChange={(e) => setMaxBudget(e.target.value)} className="rounded-2xl border border-white/10 bg-slate-950/50 px-4 py-3" />
+          <input name="bidBond" placeholder="Bond" value={bidBond} onChange={(e) => setBidBond(e.target.value)} className="neo-inset rounded-[1.5rem] px-4 py-3 text-[color:var(--copy)] outline-none" />
+          <input name="maxBudget" placeholder="Budget" value={maxBudget} onChange={(e) => setMaxBudget(e.target.value)} className="neo-inset rounded-[1.5rem] px-4 py-3 text-[color:var(--copy)] outline-none" />
         </div>
-        <button disabled={!isReady || isPending} className="rounded-2xl bg-sky-400 px-4 py-3 font-medium text-slate-950 disabled:opacity-50">
+        <button disabled={!isReady || isPending} className="neo-pill rounded-[1.5rem] px-4 py-3 font-medium text-[color:var(--copy)] disabled:opacity-50">
           {isPending ? "Creating..." : "Create Tender"}
         </button>
       </form>
-      <div className="mt-4 text-sm text-slate-400">{isReady ? "Issuer wallet connected." : "Connect a wallet and set NEXT_PUBLIC_TENDER_FACTORY_ADDRESS."}</div>
+      <div className="mt-4 text-sm text-[color:var(--muted)]">{isReady ? "Issuer connected." : "Connect wallet and set factory address."}</div>
       <TransactionToast message={receipt.isSuccess ? "Tender transaction confirmed." : error?.message} />
       {createdTender ? (
-        <div className="mt-4 text-sm text-slate-200">
-          Tender created at{" "}
-          <Link href={`/tender/${createdTender}`} className="text-sky-300 underline">
-            {createdTender}
+        <div className="mt-4 text-sm text-[color:var(--copy)]">
+          <Link href={`/tender/${createdTender}`} className="text-[color:var(--accent)]">
+            Open tender
           </Link>
         </div>
       ) : null}

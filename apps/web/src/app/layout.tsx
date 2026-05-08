@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { Geist, Space_Grotesk } from "next/font/google";
-import { Shield } from "lucide-react";
 import { ConnectWalletButton } from "../components/ConnectWalletButton";
 import { Providers } from "./providers";
 import "./globals.css";
@@ -20,18 +20,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={`${bodyFont.variable} ${displayFont.variable}`}>
         <Providers>
           <div className="mx-auto flex min-h-screen max-w-7xl flex-col px-4 py-6 sm:px-6 lg:px-8">
-            <header className="mb-8 flex items-center justify-between rounded-3xl border border-white/10 bg-white/5 px-5 py-4 backdrop-blur">
+            <header className="neo-surface mb-8 flex items-center justify-between rounded-[2rem] px-5 py-4">
               <Link href="/" className="flex items-center gap-3">
-                <span className="rounded-2xl bg-sky-400/10 p-2 text-sky-300">
-                  <Shield className="h-5 w-5" />
+                <span className="neo-pill flex h-12 w-12 items-center justify-center rounded-[1.25rem]">
+                  <Image src="/TenderShield.png" alt="TenderShield" width={28} height={28} className="h-7 w-7 object-contain" priority />
                 </span>
                 <div>
-                  <div className="font-[family-name:var(--font-display)] text-lg font-semibold">TenderShield</div>
-                  <div className="text-xs text-slate-400">Confidential procurement powered by Zama FHEVM</div>
+                  <div className="font-[family-name:var(--font-display)] text-lg font-semibold text-[color:var(--copy)]">TenderShield</div>
+                  <div className="text-xs text-[color:var(--muted)]">Confidential procurement</div>
                 </div>
               </Link>
               <div className="flex items-center gap-3">
-                <nav className="hidden gap-4 text-sm text-slate-300 md:flex">
+                <nav className="hidden gap-2 text-sm text-[color:var(--muted)] md:flex">
                   <Link href="/create">Create Tender</Link>
                   <Link href="/demo">Demo</Link>
                 </nav>

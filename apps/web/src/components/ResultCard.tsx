@@ -3,19 +3,21 @@ import { shortAddress } from "../lib/format";
 
 export function ResultCard({ winner, winningBid }: { winner?: string; winningBid?: bigint }) {
   return (
-    <div className="rounded-[2rem] border border-emerald-400/20 bg-emerald-400/8 p-6">
-      <div className="flex items-center gap-3 text-emerald-300">
-        <Trophy className="h-5 w-5" />
+    <div className="neo-surface rounded-[2.25rem] p-6">
+      <div className="flex items-center gap-3 text-[color:var(--success)]">
+        <div className="neo-pill flex h-10 w-10 items-center justify-center rounded-[1rem]">
+          <Trophy className="h-4 w-4" />
+        </div>
         <span className="text-xs uppercase tracking-[0.2em]">Final Result</span>
       </div>
       <div className="mt-4 grid gap-3 sm:grid-cols-2">
         <div>
-          <div className="text-sm text-slate-400">Winner</div>
-          <div className="text-lg font-semibold">{winner ? shortAddress(winner) : "Pending"}</div>
+          <div className="text-sm text-[color:var(--muted)]">Winner</div>
+          <div className="text-lg font-semibold text-[color:var(--copy)]">{winner ? shortAddress(winner) : "Pending"}</div>
         </div>
         <div>
-          <div className="text-sm text-slate-400">Winning bid</div>
-          <div className="text-lg font-semibold">{winningBid !== undefined ? `${winningBid.toString()} tUSD` : "Pending"}</div>
+          <div className="text-sm text-[color:var(--muted)]">Winning bid</div>
+          <div className="text-lg font-semibold text-[color:var(--copy)]">{winningBid !== undefined ? `${winningBid.toString()} tUSD` : "Pending"}</div>
         </div>
       </div>
     </div>

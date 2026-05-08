@@ -8,7 +8,12 @@
     "contracts:test": "corepack pnpm --filter @tendershield/contracts test",
     "contracts:deploy:local": "corepack pnpm --filter @tendershield/contracts deploy:local",
     "contracts:deploy:sepolia": "corepack pnpm --filter @tendershield/contracts deploy:sepolia",
+    "web:clean": "corepack pnpm --filter @tendershield/web clean",
     "web:dev": "corepack pnpm --filter @tendershield/web dev",
     "web:build": "corepack pnpm --filter @tendershield/web build"
-  }
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
 }

@@ -1,12 +1,15 @@
 export function ExplainerPanel() {
   return (
-    <div className="rounded-[2rem] border border-sky-400/20 bg-sky-400/8 p-6">
-      <div className="text-xs uppercase tracking-[0.22em] text-sky-300">Why Zama</div>
-      <h3 className="mt-2 font-[family-name:var(--font-display)] text-2xl font-semibold">Encrypted comparison, not just hidden storage</h3>
-      <div className="mt-4 space-y-3 text-sm text-slate-300">
-        <p>Vendors encrypt bids before sending them onchain.</p>
-        <p>The contract computes the minimum with `FHE.lt` and `FHE.select`, so no plaintext quotes are exposed.</p>
-        <p>Only the winner and winning price are revealed after close. Losing bids remain encrypted.</p>
+    <div className="neo-surface rounded-[2.5rem] p-8">
+      <div className="text-xs uppercase tracking-[0.22em] text-[color:var(--accent)]">Why it matters</div>
+      <h3 className="mt-2 font-[family-name:var(--font-display)] text-3xl font-semibold leading-tight text-[color:var(--copy)]">
+        Compare bids
+        <br />
+        without exposing them.
+      </h3>
+      <div className="mt-6 space-y-4 text-sm text-[color:var(--muted)]">
+        <p>Encrypted in. encrypted compare. selective reveal.</p>
+        <p>Losing quotes stay private.</p>
       </div>
     </div>
   );

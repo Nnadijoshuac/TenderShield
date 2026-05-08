@@ -14,25 +14,36 @@ async function getTenderState(address: `0x${string}`) {
   const transport = addresses.chainId === 11155111 ? http("https://ethereum-sepolia-rpc.publicnode.com") : http("http://127.0.0.1:8545");
   const publicClient = createPublicClient({ chain, transport });
 
-  const [issuer, title, descriptionURI, deadline, closed, revealRequested, finalized, bidCount, winner, winningBid] =
-    await Promise.all([
-      publicClient.readContract({ address, abi: reverseTenderAbi, functionName: "issuer" }),
-      publicClient.readContract({ address, abi: reverseTenderAbi, functionName: "title" }),
-      publicClient.readContract({ address, abi: reverseTenderAbi, functionName: "descriptionURI" }),
-      publicClient.readContract({ address, abi: reverseTenderAbi, functionName: "deadline" }),
-      publicClient.readContract({ address, abi: reverseTenderAbi, functionName: "closed" }),
-      publicClient.readContract({ address, abi: reverseTenderAbi, functionName: "revealRequested" }),
-      publicClient.readContract({ address, abi: reverseTenderAbi, functionName: "finalized" }),
-      publicClient.readContract({ address, abi: reverseTenderAbi, functionName: "getBidCount" }),
-      publicClient.readContract({ address, abi: reverseTenderAbi, functionName: "winner" }),
-      publicClient.readContract({ address, abi: reverseTenderAbi, functionName: "winningBid" }),
-    ]);
+  const summary = await publicClient.multicall({
+    contracts: [
+      { address, abi: reverseTenderAbi, functionName: "issuer" },
+      { address, abi: reverseTenderAbi, functionName: "title" },
+      { address, abi: reverseTenderAbi, functionName: "descriptionURI" },
+      { address, abi: reverseTenderAbi, functionName: "deadline" },
+      { address, abi: reverseTenderAbi, functionName: "closed" },
+      { address, abi: reverseTenderAbi, functionName: "revealRequested" },
+      { address, abi: reverseTenderAbi, functionName: "finalized" },
+      { address, abi: reverseTenderAbi, functionName: "getBidCount" },
+      { address, abi: reverseTenderAbi, functionName: "winner" },
+      { address, abi: reverseTenderAbi, functionName: "winningBid" },
+    ],
+    allowFailure: false,
+  });
 
-  const bids = await Promise.all(
-    Array.from({ length: Number(bidCount) }, (_, index) =>
-      publicClient.readContract({ address, abi: reverseTenderAbi, functionName: "getBidderAt", args: [BigInt(index)] }),
-    ),
-  );
+  const [issuer, title, descriptionURI, deadline, closed, revealRequested, finalized, bidCount, winner, winningBid] = summary;
+
+  const bids =
+    Number(bidCount) === 0
+      ? []
+      : await publicClient.multicall({
+          contracts: Array.from({ length: Number(bidCount) }, (_, index) => ({
+            address,
+            abi: reverseTenderAbi,
+            functionName: "getBidderAt" as const,
+            args: [BigInt(index)],
+          })),
+          allowFailure: false,
+        });
 
   return { issuer, title, descriptionURI, deadline, closed, revealRequested, finalized, bidCount, winner, winningBid, bids };
 }
@@ -46,31 +57,31 @@ export default async function TenderDetailPage({ params }: { params: Promise<{ a
   return (
     <div className="grid gap-8 lg:grid-cols-[1.1fr,0.9fr]">
       <section className="space-y-6">
-        <div className="rounded-[2rem] border border-white/10 bg-white/5 p-8">
+        <div className="neo-surface rounded-[2.5rem] p-8">
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div>
-              <div className="text-xs uppercase tracking-[0.22em] text-sky-300">Tender details</div>
-              <h1 className="mt-2 font-[family-name:var(--font-display)] text-4xl font-semibold">{tender.title}</h1>
-              <p className="mt-4 max-w-2xl text-slate-300">{tender.descriptionURI}</p>
+              <div className="text-xs uppercase tracking-[0.22em] text-[color:var(--accent)]">Tender</div>
+              <h1 className="mt-2 font-[family-name:var(--font-display)] text-4xl font-semibold text-[color:var(--copy)]">{tender.title}</h1>
+              <p className="mt-4 max-w-2xl text-[color:var(--muted)]">{tender.descriptionURI}</p>
             </div>
             <TenderStatusBadge closed={tender.closed} revealRequested={tender.revealRequested} finalized={tender.finalized} />
           </div>
           <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            <div className="rounded-3xl border border-white/10 bg-slate-950/30 p-4">
-              <div className="text-sm text-slate-400">Issuer</div>
-              <div className="mt-2 font-medium">{shortAddress(tender.issuer)}</div>
+            <div className="neo-surface-soft rounded-[1.75rem] p-4">
+              <div className="text-sm text-[color:var(--muted)]">Issuer</div>
+              <div className="mt-2 font-medium text-[color:var(--copy)]">{shortAddress(tender.issuer)}</div>
             </div>
-            <div className="rounded-3xl border border-white/10 bg-slate-950/30 p-4">
-              <div className="text-sm text-slate-400">Deadline</div>
-              <div className="mt-2 font-medium">{formatDateTime(tender.deadline)}</div>
+            <div className="neo-surface-soft rounded-[1.75rem] p-4">
+              <div className="text-sm text-[color:var(--muted)]">Deadline</div>
+              <div className="mt-2 font-medium text-[color:var(--copy)]">{formatDateTime(tender.deadline)}</div>
             </div>
-            <div className="rounded-3xl border border-white/10 bg-slate-950/30 p-4">
-              <div className="text-sm text-slate-400">Bid count</div>
-              <div className="mt-2 font-medium">{tender.bidCount.toString()}</div>
+            <div className="neo-surface-soft rounded-[1.75rem] p-4">
+              <div className="text-sm text-[color:var(--muted)]">Bids</div>
+              <div className="mt-2 font-medium text-[color:var(--copy)]">{tender.bidCount.toString()}</div>
             </div>
-            <div className="rounded-3xl border border-white/10 bg-slate-950/30 p-4">
-              <div className="text-sm text-slate-400">Winning reveal</div>
-              <div className="mt-2 font-medium">{tender.finalized ? "Ready" : "Pending"}</div>
+            <div className="neo-surface-soft rounded-[1.75rem] p-4">
+              <div className="text-sm text-[color:var(--muted)]">Result</div>
+              <div className="mt-2 font-medium text-[color:var(--copy)]">{tender.finalized ? "Revealed" : "Hidden"}</div>
             </div>
           </div>
         </div>
