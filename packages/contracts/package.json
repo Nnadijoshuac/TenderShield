@@ -7,14 +7,19 @@
     "compile": "cross-env TS_NODE_TRANSPILE_ONLY=true hardhat compile",
     "postcompile": "cross-env TS_NODE_TRANSPILE_ONLY=true hardhat typechain",
     "test": "hardhat test",
+    "node": "hardhat node",
     "deploy:local": "hardhat run scripts/deploy.ts --network hardhat",
+    "deploy:running": "hardhat run scripts/deploy-and-save.ts --network localhost",
     "deploy:sepolia": "hardhat run scripts/deploy.ts --network sepolia",
     "build": "npm run compile"
   },
   "dependencies": {
     "@fhevm/mock-utils": "^0.4.2",
     "@fhevm/solidity": "^0.11.1",
-    "encrypted-types": "^0.0.4"
+    "@openzeppelin/contracts": "^5.6.1",
+    "encrypted-types": "^0.0.4",
+    "fhevm": "^0.4.0",
+    "hardhat": "^2.19.0"
   },
   "devDependencies": {
     "@fhevm/hardhat-plugin": "^0.4.2",

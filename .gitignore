@@ -13,3 +13,4 @@ fhevmTemp
 .tmp-fhevm-template
 .tmp-pkg
 *.tgz
+.tmp-*.log

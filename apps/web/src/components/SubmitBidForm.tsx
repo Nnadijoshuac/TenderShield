@@ -30,11 +30,11 @@ export function SubmitBidForm({ tenderAddress, isOpen }: { tenderAddress: `0x${s
   }
 
   return (
-    <div className="neo-surface rounded-[2.25rem] p-6">
+    <div className="border border-slate-200 bg-white p-6">
       <div className="mb-4 text-sm text-[color:var(--muted)]">Encrypt quote. submit.</div>
       <div className="flex gap-3">
-        <input value={bidAmount} onChange={(e) => setBidAmount(e.target.value)} className="neo-inset flex-1 rounded-[1.5rem] px-4 py-3 text-[color:var(--copy)] outline-none" />
-        <button disabled={!isOpen || !address} onClick={onSubmit} className="neo-pill rounded-[1.5rem] px-4 py-3 font-medium text-[color:var(--copy)] disabled:opacity-50">
+        <input value={bidAmount} onChange={(e) => setBidAmount(e.target.value)} className="flex-1 border border-slate-300 bg-white px-4 py-3 text-slate-900 outline-none" />
+        <button disabled={!isOpen || !address} onClick={onSubmit} className="border border-[color:var(--accent)] bg-[color:var(--accent)] px-4 py-3 font-medium text-black disabled:opacity-50">
           Submit
         </button>
       </div>

@@ -1,6 +1,6 @@
 export function ExplainerPanel() {
   return (
-    <div className="neo-surface rounded-[2.5rem] p-8">
+    <div className="border border-slate-200 bg-white p-8">
       <div className="text-xs uppercase tracking-[0.22em] text-[color:var(--accent)]">Why it matters</div>
       <h3 className="mt-2 font-[family-name:var(--font-display)] text-3xl font-semibold leading-tight text-[color:var(--copy)]">
         Compare bids

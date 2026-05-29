@@ -13,6 +13,10 @@ const networks: HardhatUserConfig["networks"] = {
   hardhat: {
     chainId: 31337,
   },
+  localhost: {
+    url: "http://127.0.0.1:8545",
+    chainId: 31337,
+  },
 };
 
 if (PRIVATE_KEY) {
@@ -36,11 +40,11 @@ const config: HardhatUserConfig = {
     cache: "./cache",
   },
   solidity: {
-    version: "0.8.27",
+    version: "0.8.24",
     settings: {
       optimizer: {
         enabled: true,
-        runs: 800,
+        runs: 200,
       },
       evmVersion: "cancun",
     },

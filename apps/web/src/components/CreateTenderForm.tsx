@@ -46,16 +46,16 @@ export function CreateTenderForm() {
   }
 
   return (
-    <div className="neo-surface rounded-[2.5rem] p-6">
+    <div className="border border-slate-200 bg-white p-6">
       <form action={onSubmit} className="grid gap-4">
-        <input name="title" placeholder="Title" value={title} onChange={(e) => setTitle(e.target.value)} className="neo-inset rounded-[1.5rem] px-4 py-3 text-[color:var(--copy)] outline-none" />
-        <textarea name="description" placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)} className="neo-inset min-h-32 rounded-[1.5rem] px-4 py-3 text-[color:var(--copy)] outline-none" />
-        <input name="deadline" type="datetime-local" value={deadline} onChange={(e) => setDeadline(e.target.value)} className="neo-inset rounded-[1.5rem] px-4 py-3 text-[color:var(--copy)] outline-none" />
+        <input name="title" placeholder="Title" value={title} onChange={(e) => setTitle(e.target.value)} className="border border-slate-300 bg-white px-4 py-3 text-slate-900 outline-none" />
+        <textarea name="description" placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)} className="min-h-32 border border-slate-300 bg-white px-4 py-3 text-slate-900 outline-none" />
+        <input name="deadline" type="datetime-local" value={deadline} onChange={(e) => setDeadline(e.target.value)} className="border border-slate-300 bg-white px-4 py-3 text-slate-900 outline-none" />
         <div className="grid gap-4 sm:grid-cols-2">
-          <input name="bidBond" placeholder="Bond" value={bidBond} onChange={(e) => setBidBond(e.target.value)} className="neo-inset rounded-[1.5rem] px-4 py-3 text-[color:var(--copy)] outline-none" />
-          <input name="maxBudget" placeholder="Budget" value={maxBudget} onChange={(e) => setMaxBudget(e.target.value)} className="neo-inset rounded-[1.5rem] px-4 py-3 text-[color:var(--copy)] outline-none" />
+          <input name="bidBond" placeholder="Bond" value={bidBond} onChange={(e) => setBidBond(e.target.value)} className="border border-slate-300 bg-white px-4 py-3 text-slate-900 outline-none" />
+          <input name="maxBudget" placeholder="Budget" value={maxBudget} onChange={(e) => setMaxBudget(e.target.value)} className="border border-slate-300 bg-white px-4 py-3 text-slate-900 outline-none" />
         </div>
-        <button disabled={!isReady || isPending} className="neo-pill rounded-[1.5rem] px-4 py-3 font-medium text-[color:var(--copy)] disabled:opacity-50">
+        <button disabled={!isReady || isPending} className="border border-[color:var(--accent)] bg-[color:var(--accent)] px-4 py-3 font-medium text-black disabled:opacity-50">
           {isPending ? "Creating..." : "Create Tender"}
         </button>
       </form>

@@ -15,19 +15,19 @@ export function ConnectWalletButton() {
   }, []);
 
   if (!mounted) {
-    return <button className="neo-pill rounded-full px-4 py-2 text-sm font-medium text-[color:var(--copy)]">Connect</button>;
+    return <button className="min-h-11 min-w-24 border border-slate-300 bg-white px-3 py-3 text-sm font-medium text-slate-900">Connect</button>;
   }
 
   if (isConnected && address) {
     return (
-      <button className="neo-inset rounded-full px-4 py-2 text-sm text-[color:var(--accent)]" onClick={() => disconnect()}>
+      <button className="min-h-11 min-w-24 border border-[color:var(--accent)] bg-[color:var(--accent)] px-3 py-3 text-center text-sm font-medium text-black" onClick={() => disconnect()}>
         {shortAddress(address)}
       </button>
     );
   }
 
   return (
-    <button className="neo-pill rounded-full px-4 py-2 text-sm font-medium text-[color:var(--copy)]" onClick={() => connect({ connector: connectors[0] })} disabled={isPending}>
+    <button className="min-h-11 min-w-24 border border-slate-300 bg-white px-3 py-3 text-sm font-medium text-slate-900 disabled:opacity-50" onClick={() => connect({ connector: connectors[0] })} disabled={isPending}>
       {isPending ? "Connecting..." : "Connect"}
     </button>
   );

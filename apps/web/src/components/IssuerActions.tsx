@@ -54,24 +54,24 @@ export function IssuerActions({
   }
 
   return (
-    <div className="neo-surface rounded-[2.25rem] p-6">
+    <div className="border border-slate-200 bg-white p-6">
       <div className="mb-4 text-sm text-[color:var(--muted)]">Close. reveal. finalize.</div>
       <div className="flex flex-wrap gap-3">
-        <button disabled={!canClose} onClick={closeTender} className="neo-pill rounded-[1.5rem] px-4 py-3 text-sm font-medium text-[color:var(--copy)] disabled:opacity-50">
+        <button disabled={!canClose} onClick={closeTender} className="border border-[color:var(--accent)] bg-[color:var(--accent)] px-4 py-3 text-sm font-medium text-black disabled:opacity-50">
           Close Tender
         </button>
-        <button disabled={!canReveal} onClick={requestReveal} className="neo-pill rounded-[1.5rem] px-4 py-3 text-sm font-medium text-[color:var(--copy)] disabled:opacity-50">
+        <button disabled={!canReveal} onClick={requestReveal} className="border border-[color:var(--accent)] bg-[color:var(--accent)] px-4 py-3 text-sm font-medium text-black disabled:opacity-50">
           Reveal
         </button>
-        <button disabled={!canFinalize} onClick={finalizeTender} className="neo-pill rounded-[1.5rem] px-4 py-3 text-sm font-medium text-[color:var(--copy)] disabled:opacity-50">
+        <button disabled={!canFinalize} onClick={finalizeTender} className="border border-[color:var(--accent)] bg-[color:var(--accent)] px-4 py-3 text-sm font-medium text-black disabled:opacity-50">
           Finalize
         </button>
       </div>
       <div className="mt-4 flex flex-wrap gap-3">
-        <button onClick={() => writeContractAsync({ address: tenderAddress, abi: reverseTenderAbi, functionName: "claimRefund" })} className="neo-inset rounded-[1.5rem] px-4 py-3 text-sm text-[color:var(--muted)]">
+        <button onClick={() => writeContractAsync({ address: tenderAddress, abi: reverseTenderAbi, functionName: "claimRefund" })} className="border border-slate-300 bg-white px-4 py-3 text-sm text-slate-600">
           Refund
         </button>
-        <button onClick={() => writeContractAsync({ address: tenderAddress, abi: reverseTenderAbi, functionName: "claimAward" })} className="neo-inset rounded-[1.5rem] px-4 py-3 text-sm text-[color:var(--muted)]">
+        <button onClick={() => writeContractAsync({ address: tenderAddress, abi: reverseTenderAbi, functionName: "claimAward" })} className="border border-slate-300 bg-white px-4 py-3 text-sm text-slate-600">
           Award
         </button>
       </div>

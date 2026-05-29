@@ -48,53 +48,57 @@ async function getTenderState(address: `0x${string}`) {
   return { issuer, title, descriptionURI, deadline, closed, revealRequested, finalized, bidCount, winner, winningBid, bids };
 }
 
-export default async function TenderDetailPage({ params }: { params: Promise<{ address: string }> }) {
+export default async function EncryptionDetailPage({ params }: { params: Promise<{ address: string }> }) {
   const { address } = await params;
-  const tenderAddress = address as `0x${string}`;
-  const tender = await getTenderState(tenderAddress);
-  const isOpen = !tender.closed;
+  const encryptionAddress = address as `0x${string}`;
+  const encryption = await getTenderState(encryptionAddress);
+  const isOpen = !encryption.closed;
 
   return (
     <div className="grid gap-8 lg:grid-cols-[1.1fr,0.9fr]">
       <section className="space-y-6">
-        <div className="neo-surface rounded-[2.5rem] p-8">
-          <div className="flex flex-wrap items-start justify-between gap-4">
-            <div>
-              <div className="text-xs uppercase tracking-[0.22em] text-[color:var(--accent)]">Tender</div>
-              <h1 className="mt-2 font-[family-name:var(--font-display)] text-4xl font-semibold text-[color:var(--copy)]">{tender.title}</h1>
-              <p className="mt-4 max-w-2xl text-[color:var(--muted)]">{tender.descriptionURI}</p>
+        <div className="rounded-lg border border-slate-200 bg-slate-50 p-8">
+          <div className="flex flex-wrap items-start justify-between gap-4 mb-6">
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="px-3 py-1 rounded-full bg-slate-200 border border-slate-300 text-xs font-semibold text-slate-900 uppercase tracking-wider">Active Encryption</span>
+              </div>
+              <h1 className="text-4xl font-bold text-slate-900 mb-3">{encryption.title}</h1>
+              <p className="text-slate-600 leading-relaxed">{encryption.descriptionURI}</p>
             </div>
-            <TenderStatusBadge closed={tender.closed} revealRequested={tender.revealRequested} finalized={tender.finalized} />
+            <TenderStatusBadge closed={encryption.closed} revealRequested={encryption.revealRequested} finalized={encryption.finalized} />
           </div>
           <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            <div className="neo-surface-soft rounded-[1.75rem] p-4">
-              <div className="text-sm text-[color:var(--muted)]">Issuer</div>
-              <div className="mt-2 font-medium text-[color:var(--copy)]">{shortAddress(tender.issuer)}</div>
-            </div>
-            <div className="neo-surface-soft rounded-[1.75rem] p-4">
-              <div className="text-sm text-[color:var(--muted)]">Deadline</div>
-              <div className="mt-2 font-medium text-[color:var(--copy)]">{formatDateTime(tender.deadline)}</div>
-            </div>
-            <div className="neo-surface-soft rounded-[1.75rem] p-4">
-              <div className="text-sm text-[color:var(--muted)]">Bids</div>
-              <div className="mt-2 font-medium text-[color:var(--copy)]">{tender.bidCount.toString()}</div>
-            </div>
-            <div className="neo-surface-soft rounded-[1.75rem] p-4">
-              <div className="text-sm text-[color:var(--muted)]">Result</div>
-              <div className="mt-2 font-medium text-[color:var(--copy)]">{tender.finalized ? "Revealed" : "Hidden"}</div>
-            </div>
+            {[
+              { label: "Issuer", value: shortAddress(encryption.issuer) },
+              { label: "Deadline", value: formatDateTime(encryption.deadline) },
+              { label: "Bids Received", value: encryption.bidCount.toString() },
+              { label: "Status", value: encryption.finalized ? "Revealed" : "Encrypted" }
+            ].map((item, i) => (
+              <div key={i} className="rounded-lg border border-slate-200 bg-slate-100 p-4">
+                <div className="text-xs text-slate-600 font-semibold">{item.label}</div>
+                <div className="mt-2 font-semibold text-slate-900">{item.value}</div>
+              </div>
+            ))}
           </div>
         </div>
-        <div className="grid gap-4 md:grid-cols-2">
-          {tender.bids.map((bidder, index) => (
-            <EncryptedBidCard key={`${bidder}-${index}`} bidder={bidder} index={index} />
-          ))}
-        </div>
+
+        {encryption.bids.length > 0 && (
+          <div className="rounded-lg border border-slate-200 bg-slate-50 p-8">
+            <h3 className="text-xl font-bold text-slate-900 mb-4">Encrypted Bids</h3>
+            <div className="grid gap-4 md:grid-cols-2">
+              {encryption.bids.map((bidder, index) => (
+                <EncryptedBidCard key={`${bidder}-${index}`} bidder={bidder} index={index} />
+              ))}
+            </div>
+          </div>
+        )}
       </section>
+
       <section className="space-y-6">
-        <SubmitBidForm tenderAddress={tenderAddress} isOpen={isOpen} />
-        <IssuerActions tenderAddress={tenderAddress} canClose={!tender.closed} canReveal={tender.closed && !tender.revealRequested} canFinalize={tender.revealRequested && !tender.finalized} />
-        {tender.finalized ? <ResultCard winner={tender.winner} winningBid={tender.winningBid} /> : null}
+        <SubmitBidForm tenderAddress={encryptionAddress} isOpen={isOpen} />
+        <IssuerActions tenderAddress={encryptionAddress} canClose={!encryption.closed} canReveal={encryption.closed && !encryption.revealRequested} canFinalize={encryption.revealRequested && !encryption.finalized} />
+        {encryption.finalized && <ResultCard winner={encryption.winner} winningBid={encryption.winningBid} />}
       </section>
     </div>
   );
