@@ -24,7 +24,7 @@ export const reverseTenderAbi = parseAbi([
   "function getBidderAt(uint256 index) view returns (address)",
   "function getEncryptedResultHandles() view returns (bytes32 lowestBidHandle, bytes32 winnerIndexHandle)",
   "function getMyBidHandle() view returns (bytes32)",
-  "function submitBid(uint256 encryptedBid, bytes inputProof)",
+  "function submitBid(bytes32 encryptedBid, bytes inputProof)",
   "function closeTender()",
   "function requestReveal()",
   "function finalizeTender(uint64 clearLowestBid, uint64 clearWinnerIndex, bytes decryptionProof)",
