@@ -23,6 +23,11 @@ export default function DashboardPage() {
   const publicClient = usePublicClient();
   const [tenders, setTenders] = useState<TenderInfo[]>([]);
   const [loading, setLoading] = useState(true);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     async function loadTenders() {
@@ -103,6 +108,10 @@ export default function DashboardPage() {
 
     loadTenders();
   }, [address, publicClient]);
+
+  if (!mounted) {
+    return null;
+  }
 
   if (!address) {
     return (
