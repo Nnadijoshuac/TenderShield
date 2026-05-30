@@ -9,6 +9,7 @@ export function Header() {
         </Link>
         <nav className="hidden md:flex items-center gap-8">
           <Link href="/" className="text-slate-600 hover:text-[color:var(--accent-ink)] transition text-sm font-medium">Home</Link>
+          <Link href="/dashboard" className="text-slate-600 hover:text-[color:var(--accent-ink)] transition text-sm font-medium">Dashboard</Link>
           <Link href="/create" className="text-slate-600 hover:text-[color:var(--accent-ink)] transition text-sm font-medium">Create</Link>
           <Link href="/demo" className="text-slate-600 hover:text-[color:var(--accent-ink)] transition text-sm font-medium">Demo</Link>
         </nav>
