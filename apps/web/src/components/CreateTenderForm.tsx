@@ -75,16 +75,50 @@ export function CreateTenderForm() {
       <div className="mt-4 text-sm text-[color:var(--muted)]">{isReady ? "Issuer connected." : "Connect wallet and set factory address."}</div>
       <TransactionToast message={receipt.isSuccess ? "Tender created! ✓" : error?.message} />
       {createdTenderAddress && (
-        <div className="mt-6 p-4 border-2 border-green-500 bg-green-50 rounded-lg">
-          <p className="text-sm text-slate-600 mb-2">Your tender link (share with vendors):</p>
-          <p className="font-mono text-xs bg-white p-2 border border-slate-300 rounded overflow-auto mb-3">
-            {typeof window !== "undefined" ? `${window.location.origin}/tender/${createdTenderAddress}` : `/tender/${createdTenderAddress}`}
-          </p>
-          <Link href={`/tender/${createdTenderAddress}`} className="inline-block px-4 py-2 bg-green-600 text-white rounded font-medium hover:bg-green-700">
-            View Tender
-          </Link>
-        </div>
+        <TenderLinkDisplay address={createdTenderAddress} />
       )}
+    </div>
+  );
+}
+
+function TenderLinkDisplay({ address }: { address: `0x${string}` }) {
+  const [copied, setCopied] = useState(false);
+  const tenderUrl = typeof window !== "undefined" ? `${window.location.origin}/tender/${address}` : `/tender/${address}`;
+
+  function copyToClipboard() {
+    navigator.clipboard.writeText(tenderUrl);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  }
+
+  return (
+    <div className="mt-8 p-6 border-2 border-emerald-500 bg-emerald-50 rounded-lg">
+      <h3 className="text-lg font-bold text-emerald-900 mb-3">✓ Tender Created!</h3>
+      <p className="text-sm text-emerald-800 mb-4">Share this link with vendors to collect bids:</p>
+
+      <div className="flex gap-2 items-center mb-4">
+        <input
+          type="text"
+          value={tenderUrl}
+          readOnly
+          className="flex-1 px-3 py-2 bg-white border border-emerald-300 rounded font-mono text-sm text-slate-900"
+        />
+        <button
+          onClick={copyToClipboard}
+          className="px-4 py-2 bg-emerald-600 text-white rounded font-medium hover:bg-emerald-700 transition"
+        >
+          {copied ? "✓ Copied" : "Copy"}
+        </button>
+      </div>
+
+      <div className="flex gap-2">
+        <Link
+          href={`/tender/${address}`}
+          className="flex-1 text-center px-4 py-2 bg-emerald-600 text-white rounded font-medium hover:bg-emerald-700 transition"
+        >
+          Open Tender
+        </Link>
+      </div>
     </div>
   );
 }
