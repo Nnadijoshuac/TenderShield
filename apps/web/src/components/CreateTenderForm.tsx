@@ -1,20 +1,20 @@
 "use client";
 
-import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
 import { useAccount, useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import { addresses } from "../config/addresses";
 import { tenderFactoryAbi } from "../lib/contracts";
 import { TransactionToast } from "./TransactionToast";
 
 export function CreateTenderForm() {
+  const router = useRouter();
   const { address } = useAccount();
   const [title, setTitle] = useState("Procurement for 50 laptops");
   const [description, setDescription] = useState("NGO procurement request for laptops for students. Vendors submit sealed quotes.");
   const [deadline, setDeadline] = useState(() => new Date(Date.now() + 3600_000).toISOString().slice(0, 16));
   const [bidBond, setBidBond] = useState("25");
   const [maxBudget, setMaxBudget] = useState("600");
-  const [createdTender, setCreatedTender] = useState<string>();
   const { writeContract, data: hash, isPending, error } = useWriteContract();
   const receipt = useWaitForTransactionReceipt({ hash });
 
@@ -38,12 +38,12 @@ export function CreateTenderForm() {
     });
   }
 
-  if (receipt.isSuccess && receipt.data.logs[0]) {
-    const tenderAddress = receipt.data.logs[0].address;
-    if (createdTender !== tenderAddress) {
-      setCreatedTender(tenderAddress);
+  useEffect(() => {
+    if (receipt.isSuccess && receipt.logs && receipt.logs[0]) {
+      const tenderAddress = receipt.logs[0].address as `0x${string}`;
+      router.push(`/tender/${tenderAddress}`);
     }
-  }
+  }, [receipt.isSuccess, receipt.logs, router]);
 
   return (
     <div className="border border-slate-200 bg-white p-6">
@@ -60,14 +60,7 @@ export function CreateTenderForm() {
         </button>
       </form>
       <div className="mt-4 text-sm text-[color:var(--muted)]">{isReady ? "Issuer connected." : "Connect wallet and set factory address."}</div>
-      <TransactionToast message={receipt.isSuccess ? "Tender transaction confirmed." : error?.message} />
-      {createdTender ? (
-        <div className="mt-4 text-sm text-[color:var(--copy)]">
-          <Link href={`/tender/${createdTender}`} className="text-[color:var(--accent)]">
-            Open tender
-          </Link>
-        </div>
-      ) : null}
+      <TransactionToast message={receipt.isSuccess ? "Tender created! Redirecting..." : error?.message} />
     </div>
   );
 }
