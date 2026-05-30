@@ -32,17 +32,20 @@ export default function DashboardPage() {
   useEffect(() => {
     async function loadTenders() {
       if (!address || !publicClient || !addresses.tenderFactory) {
+        console.log("Missing data:", { address, publicClient: !!publicClient, factory: addresses.tenderFactory });
         setLoading(false);
         return;
       }
 
       try {
+        console.log("Querying tenders for address:", address);
         const tenderAddresses = (await publicClient.readContract({
           address: addresses.tenderFactory,
           abi: tenderFactoryAbi,
           functionName: "getTendersByIssuer",
           args: [address],
         })) as `0x${string}`[];
+        console.log("Found tenders:", tenderAddresses);
 
         if (tenderAddresses.length === 0) {
           setTenders([]);
@@ -98,9 +101,11 @@ export default function DashboardPage() {
           })
         );
 
+        console.log("Loaded tender details:", tenderDetails);
         setTenders(tenderDetails.reverse());
       } catch (error) {
-        console.error("Error loading tenders:", error);
+        console.error("ERROR loading tenders:", error);
+        console.error("Stack:", error instanceof Error ? error.stack : "");
       } finally {
         setLoading(false);
       }
