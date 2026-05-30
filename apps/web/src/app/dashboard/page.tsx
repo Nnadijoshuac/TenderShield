@@ -114,8 +114,9 @@ export default function DashboardPage() {
     loadTenders();
   }, [address, publicClient]);
 
+  // Prevent hydration mismatch - only render after mount
   if (!mounted) {
-    return null;
+    return <div className="py-20" />;
   }
 
   if (!address) {
