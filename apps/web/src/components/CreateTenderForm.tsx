@@ -75,7 +75,7 @@ export function CreateTenderForm() {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="e.g., Procurement for 50 laptops"
-            className="w-full px-4 py-3 border border-slate-300 rounded-lg text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+            className="w-full px-4 py-3 border border-slate-300 rounded-lg text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#FFD208] focus:border-transparent"
           />
           <p className="text-xs text-slate-500 mt-1">A clear title for your procurement round</p>
         </div>
@@ -90,7 +90,7 @@ export function CreateTenderForm() {
             onChange={(e) => setDescription(e.target.value)}
             placeholder="Describe what you're procuring, specifications, and requirements..."
             rows={4}
-            className="w-full px-4 py-3 border border-slate-300 rounded-lg text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent resize-none"
+            className="w-full px-4 py-3 border border-slate-300 rounded-lg text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#FFD208] focus:border-transparent resize-none"
           />
           <p className="text-xs text-slate-500 mt-1">Details suppliers need to understand your needs</p>
         </div>
@@ -104,7 +104,7 @@ export function CreateTenderForm() {
             type="datetime-local"
             value={deadline}
             onChange={(e) => setDeadline(e.target.value)}
-            className="w-full px-4 py-3 border border-slate-300 rounded-lg text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+            className="w-full px-4 py-3 border border-slate-300 rounded-lg text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#FFD208] focus:border-transparent"
           />
           <p className="text-xs text-slate-500 mt-1">When bidding closes and evaluation starts</p>
         </div>
@@ -120,7 +120,7 @@ export function CreateTenderForm() {
               value={bidBond}
               onChange={(e) => setBidBond(e.target.value)}
               placeholder="e.g., 25"
-              className="w-full px-4 py-3 border border-slate-300 rounded-lg text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+              className="w-full px-4 py-3 border border-slate-300 rounded-lg text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#FFD208] focus:border-transparent"
             />
             <p className="text-xs text-slate-500 mt-1">Deposit required from bidders</p>
           </div>
@@ -133,7 +133,7 @@ export function CreateTenderForm() {
               value={maxBudget}
               onChange={(e) => setMaxBudget(e.target.value)}
               placeholder="e.g., 600"
-              className="w-full px-4 py-3 border border-slate-300 rounded-lg text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+              className="w-full px-4 py-3 border border-slate-300 rounded-lg text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#FFD208] focus:border-transparent"
             />
             <p className="text-xs text-slate-500 mt-1">Maximum you're willing to pay</p>
           </div>
@@ -144,7 +144,7 @@ export function CreateTenderForm() {
       <button
         type="submit"
         disabled={!formValid || isPending}
-        className="w-full px-6 py-4 bg-amber-600 text-white font-semibold rounded-lg hover:bg-amber-700 disabled:opacity-50 disabled:cursor-not-allowed transition"
+        className="w-full px-6 py-4 bg-[#FFD208] text-white font-semibold rounded-lg hover:bg-[#E6BB00] disabled:opacity-50 disabled:cursor-not-allowed transition"
       >
         {isPending ? "Creating Tender..." : "Create Tender"}
       </button>
@@ -158,11 +158,11 @@ export function CreateTenderForm() {
 
       {/* Success Display */}
       {showSuccess && (
-        <div className="mt-12 rounded-2xl border-4 border-amber-500 bg-gradient-to-br from-amber-50 via-yellow-50 to-orange-50 p-12 shadow-xl text-center">
+        <div className="mt-12 rounded-2xl border-4 border-[#FFD208] bg-gradient-to-br from-amber-50 via-yellow-50 to-orange-50 p-12 shadow-xl text-center">
           <div className="text-6xl mb-4">✓</div>
           <h2 className="text-4xl font-bold text-amber-900 mb-2">Tender Created!</h2>
           <p className="text-lg text-amber-800 mb-8">Redirecting to your dashboard...</p>
-          <Link href="/dashboard" className="inline-block px-6 py-3 bg-amber-600 text-white rounded-lg font-bold hover:bg-amber-700">
+          <Link href="/dashboard" className="inline-block px-6 py-3 bg-[#FFD208] text-white rounded-lg font-bold hover:bg-[#E6BB00]">
             Go to Dashboard
           </Link>
         </div>
