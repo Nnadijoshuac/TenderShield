@@ -1,13 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
-import { useAccount, useWaitForTransactionReceipt, useWriteContract } from "wagmi";
+import { useEffect, useMemo, useState } from "react";
+import { useAccount, usePublicClient, useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import { addresses } from "../config/addresses";
 import { tenderFactoryAbi } from "../lib/contracts";
 import { TransactionToast } from "./TransactionToast";
 
 export function CreateTenderForm() {
+  const publicClient = usePublicClient();
   const { address } = useAccount();
   const [title, setTitle] = useState("Procurement for 50 laptops");
   const [description, setDescription] = useState("NGO procurement request for laptops for students. Vendors submit sealed quotes.");
@@ -38,9 +39,24 @@ export function CreateTenderForm() {
     });
   }
 
-  if (receipt.isSuccess && receipt.data?.contractAddress && !createdTenderAddress) {
-    setCreatedTenderAddress(receipt.data.contractAddress as `0x${string}`);
-  }
+  useEffect(() => {
+    async function getTenderAddress() {
+      if (!receipt.isSuccess || !publicClient || !address || !addresses.tenderFactory) return;
+
+      const tenders = await publicClient.readContract({
+        address: addresses.tenderFactory,
+        abi: tenderFactoryAbi,
+        functionName: "getTendersByIssuer",
+        args: [address],
+      }) as `0x${string}`[];
+
+      if (tenders.length > 0) {
+        setCreatedTenderAddress(tenders[tenders.length - 1]);
+      }
+    }
+
+    getTenderAddress();
+  }, [receipt.isSuccess, publicClient, address]);
 
   return (
     <div className="border border-slate-200 bg-white p-6">
