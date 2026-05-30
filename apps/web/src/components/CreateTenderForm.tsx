@@ -39,11 +39,10 @@ export function CreateTenderForm() {
   }
 
   useEffect(() => {
-    if (receipt.isSuccess && receipt.data && receipt.data.logs && receipt.data.logs[0]) {
-      const tenderAddress = receipt.data.logs[0].address as `0x${string}`;
-      router.push(`/tender/${tenderAddress}`);
+    if (receipt.isSuccess) {
+      setTimeout(() => router.push("/dashboard"), 1000);
     }
-  }, [receipt.isSuccess, receipt.data, router]);
+  }, [receipt.isSuccess, router]);
 
   return (
     <div className="border border-slate-200 bg-white p-6">
