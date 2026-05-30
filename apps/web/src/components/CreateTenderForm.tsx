@@ -1,20 +1,20 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
+import { useMemo, useState } from "react";
 import { useAccount, useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import { addresses } from "../config/addresses";
 import { tenderFactoryAbi } from "../lib/contracts";
 import { TransactionToast } from "./TransactionToast";
 
 export function CreateTenderForm() {
-  const router = useRouter();
   const { address } = useAccount();
   const [title, setTitle] = useState("Procurement for 50 laptops");
   const [description, setDescription] = useState("NGO procurement request for laptops for students. Vendors submit sealed quotes.");
   const [deadline, setDeadline] = useState(() => new Date(Date.now() + 3600_000).toISOString().slice(0, 16));
   const [bidBond, setBidBond] = useState("25");
   const [maxBudget, setMaxBudget] = useState("600");
+  const [createdTenderAddress, setCreatedTenderAddress] = useState<`0x${string}`>();
   const { writeContract, data: hash, isPending, error } = useWriteContract();
   const receipt = useWaitForTransactionReceipt({ hash });
 
@@ -38,11 +38,9 @@ export function CreateTenderForm() {
     });
   }
 
-  useEffect(() => {
-    if (receipt.isSuccess) {
-      setTimeout(() => router.push("/dashboard"), 1000);
-    }
-  }, [receipt.isSuccess, router]);
+  if (receipt.isSuccess && receipt.data?.contractAddress && !createdTenderAddress) {
+    setCreatedTenderAddress(receipt.data.contractAddress as `0x${string}`);
+  }
 
   return (
     <div className="border border-slate-200 bg-white p-6">
@@ -59,7 +57,18 @@ export function CreateTenderForm() {
         </button>
       </form>
       <div className="mt-4 text-sm text-[color:var(--muted)]">{isReady ? "Issuer connected." : "Connect wallet and set factory address."}</div>
-      <TransactionToast message={receipt.isSuccess ? "Tender created! Redirecting..." : error?.message} />
+      <TransactionToast message={receipt.isSuccess ? "Tender created! ✓" : error?.message} />
+      {createdTenderAddress && (
+        <div className="mt-6 p-4 border-2 border-green-500 bg-green-50 rounded-lg">
+          <p className="text-sm text-slate-600 mb-2">Your tender link (share with vendors):</p>
+          <p className="font-mono text-xs bg-white p-2 border border-slate-300 rounded overflow-auto mb-3">
+            {typeof window !== "undefined" ? `${window.location.origin}/tender/${createdTenderAddress}` : `/tender/${createdTenderAddress}`}
+          </p>
+          <Link href={`/tender/${createdTenderAddress}`} className="inline-block px-4 py-2 bg-green-600 text-white rounded font-medium hover:bg-green-700">
+            View Tender
+          </Link>
+        </div>
+      )}
     </div>
   );
 }
