@@ -81,7 +81,7 @@ export function CreateTenderForm() {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="e.g., Procurement for 50 laptops"
-            className="w-full px-4 py-3 border border-slate-300 rounded-lg text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-4 py-3 border border-slate-300 rounded-lg text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
           />
           <p className="text-xs text-slate-500 mt-1">A clear title for your procurement round</p>
         </div>
@@ -96,7 +96,7 @@ export function CreateTenderForm() {
             onChange={(e) => setDescription(e.target.value)}
             placeholder="Describe what you're procuring, specifications, and requirements..."
             rows={4}
-            className="w-full px-4 py-3 border border-slate-300 rounded-lg text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+            className="w-full px-4 py-3 border border-slate-300 rounded-lg text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent resize-none"
           />
           <p className="text-xs text-slate-500 mt-1">Details suppliers need to understand your needs</p>
         </div>
@@ -110,7 +110,7 @@ export function CreateTenderForm() {
             type="datetime-local"
             value={deadline}
             onChange={(e) => setDeadline(e.target.value)}
-            className="w-full px-4 py-3 border border-slate-300 rounded-lg text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-4 py-3 border border-slate-300 rounded-lg text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
           />
           <p className="text-xs text-slate-500 mt-1">When bidding closes and evaluation starts</p>
         </div>
@@ -126,7 +126,7 @@ export function CreateTenderForm() {
               value={bidBond}
               onChange={(e) => setBidBond(e.target.value)}
               placeholder="e.g., 25"
-              className="w-full px-4 py-3 border border-slate-300 rounded-lg text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-3 border border-slate-300 rounded-lg text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
             />
             <p className="text-xs text-slate-500 mt-1">Deposit required from bidders</p>
           </div>
@@ -139,7 +139,7 @@ export function CreateTenderForm() {
               value={maxBudget}
               onChange={(e) => setMaxBudget(e.target.value)}
               placeholder="e.g., 600"
-              className="w-full px-4 py-3 border border-slate-300 rounded-lg text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-3 border border-slate-300 rounded-lg text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
             />
             <p className="text-xs text-slate-500 mt-1">Maximum you're willing to pay</p>
           </div>
@@ -150,7 +150,7 @@ export function CreateTenderForm() {
       <button
         type="submit"
         disabled={!formValid || isPending}
-        className="w-full px-6 py-4 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition"
+        className="w-full px-6 py-4 bg-amber-600 text-white font-semibold rounded-lg hover:bg-amber-700 disabled:opacity-50 disabled:cursor-not-allowed transition"
       >
         {isPending ? "Creating Tender..." : "Create Tender"}
       </button>
@@ -183,31 +183,52 @@ function TenderLinkDisplay({ address }: { address: `0x${string}` }) {
   }
 
   return (
-    <div className="mt-8 rounded-lg border-2 border-emerald-500 bg-emerald-50 p-8">
-      <h3 className="text-xl font-bold text-emerald-900 mb-4">✓ Tender Created Successfully!</h3>
-      <p className="text-sm text-emerald-800 mb-6">Share this link with suppliers to collect encrypted bids:</p>
+    <div className="mt-12 space-y-6">
+      <div className="rounded-2xl border-4 border-amber-500 bg-gradient-to-br from-amber-50 via-yellow-50 to-orange-50 p-12 shadow-xl">
+        <div className="text-center mb-10">
+          <div className="text-6xl mb-4">✓</div>
+          <h2 className="text-4xl font-bold text-amber-900 mb-3">Tender Created!</h2>
+          <p className="text-lg text-amber-800">Your procurement round is ready</p>
+        </div>
 
-      <div className="flex gap-2 items-center mb-6">
-        <input
-          type="text"
-          value={tenderUrl}
-          readOnly
-          className="flex-1 px-4 py-3 bg-white border border-emerald-300 rounded-lg font-mono text-sm text-slate-900"
-        />
-        <button
-          onClick={copyToClipboard}
-          className="px-4 py-3 bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 transition whitespace-nowrap"
-        >
-          {copied ? "✓ Copied" : "Copy"}
-        </button>
+        <div className="bg-white rounded-xl p-8 border-3 border-amber-300 mb-8 shadow-lg">
+          <p className="text-xs font-bold text-amber-600 mb-4 uppercase tracking-widest">📋 Tender Link (Share This)</p>
+          <div className="flex gap-3 items-stretch mb-4">
+            <input
+              type="text"
+              value={tenderUrl}
+              readOnly
+              className="flex-1 px-5 py-4 bg-amber-50 border-2 border-amber-200 rounded-lg font-mono text-base text-slate-900 font-bold"
+            />
+            <button
+              onClick={copyToClipboard}
+              className={`px-6 py-4 font-bold rounded-lg transition whitespace-nowrap ${
+                copied
+                  ? "bg-green-600 text-white"
+                  : "bg-amber-600 text-white hover:bg-amber-700"
+              }`}
+            >
+              {copied ? "✓ Copied!" : "Copy"}
+            </button>
+          </div>
+          <p className="text-sm text-slate-600">✓ Vendors use this link to submit bids</p>
+        </div>
+
+        <div className="grid grid-cols-2 gap-4">
+          <Link
+            href={`/tender/${address}`}
+            className="text-center px-6 py-4 bg-amber-600 text-white rounded-lg font-bold hover:bg-amber-700 transition"
+          >
+            View Tender
+          </Link>
+          <Link
+            href="/dashboard"
+            className="text-center px-6 py-4 border-2 border-amber-600 text-amber-700 rounded-lg font-bold hover:bg-amber-50 transition"
+          >
+            Dashboard
+          </Link>
+        </div>
       </div>
-
-      <Link
-        href={`/tender/${address}`}
-        className="block text-center px-6 py-3 bg-emerald-600 text-white rounded-lg font-semibold hover:bg-emerald-700 transition"
-      >
-        View Your Tender
-      </Link>
     </div>
   );
 }
