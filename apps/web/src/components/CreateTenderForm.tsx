@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { useAccount, usePublicClient, useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import { addresses } from "../config/addresses";
@@ -8,6 +9,7 @@ import { tenderFactoryAbi } from "../lib/contracts";
 import { TransactionToast } from "./TransactionToast";
 
 export function CreateTenderForm() {
+  const router = useRouter();
   const publicClient = usePublicClient();
   const { address } = useAccount();
   const [title, setTitle] = useState("");
@@ -16,6 +18,7 @@ export function CreateTenderForm() {
   const [bidBond, setBidBond] = useState("");
   const [maxBudget, setMaxBudget] = useState("");
   const [createdTenderAddress, setCreatedTenderAddress] = useState<`0x${string}`>();
+  const [showSuccess, setShowSuccess] = useState(false);
   const { writeContract, data: hash, isPending, error } = useWriteContract();
   const receipt = useWaitForTransactionReceipt({ hash });
 
@@ -42,23 +45,14 @@ export function CreateTenderForm() {
   }
 
   useEffect(() => {
-    async function getTenderAddress() {
-      if (!receipt.isSuccess || !publicClient || !address || !addresses.tenderFactory) return;
-
-      const tenders = await publicClient.readContract({
-        address: addresses.tenderFactory,
-        abi: tenderFactoryAbi,
-        functionName: "getTendersByIssuer",
-        args: [address],
-      }) as `0x${string}`[];
-
-      if (tenders.length > 0) {
-        setCreatedTenderAddress(tenders[tenders.length - 1]);
-      }
+    if (receipt.isSuccess) {
+      setShowSuccess(true);
+      // Redirect to dashboard after 3 seconds
+      setTimeout(() => {
+        router.push("/dashboard");
+      }, 3000);
     }
-
-    getTenderAddress();
-  }, [receipt.isSuccess, publicClient, address]);
+  }, [receipt.isSuccess, router]);
 
   if (!isReady) {
     return (
@@ -163,72 +157,18 @@ export function CreateTenderForm() {
       )}
 
       {/* Success Display */}
-      {createdTenderAddress && (
-        <TenderLinkDisplay address={createdTenderAddress} />
+      {showSuccess && (
+        <div className="mt-12 rounded-2xl border-4 border-amber-500 bg-gradient-to-br from-amber-50 via-yellow-50 to-orange-50 p-12 shadow-xl text-center">
+          <div className="text-6xl mb-4">✓</div>
+          <h2 className="text-4xl font-bold text-amber-900 mb-2">Tender Created!</h2>
+          <p className="text-lg text-amber-800 mb-8">Redirecting to your dashboard...</p>
+          <Link href="/dashboard" className="inline-block px-6 py-3 bg-amber-600 text-white rounded-lg font-bold hover:bg-amber-700">
+            Go to Dashboard
+          </Link>
+        </div>
       )}
 
       <TransactionToast message={receipt.isSuccess ? "Tender created! ✓" : error?.message} />
     </form>
-  );
-}
-
-function TenderLinkDisplay({ address }: { address: `0x${string}` }) {
-  const [copied, setCopied] = useState(false);
-  const tenderUrl = typeof window !== "undefined" ? `${window.location.origin}/tender/${address}` : `/tender/${address}`;
-
-  function copyToClipboard() {
-    navigator.clipboard.writeText(tenderUrl);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  }
-
-  return (
-    <div className="mt-12 space-y-6">
-      <div className="rounded-2xl border-4 border-amber-500 bg-gradient-to-br from-amber-50 via-yellow-50 to-orange-50 p-12 shadow-xl">
-        <div className="text-center mb-10">
-          <div className="text-6xl mb-4">✓</div>
-          <h2 className="text-4xl font-bold text-amber-900 mb-3">Tender Created!</h2>
-          <p className="text-lg text-amber-800">Your procurement round is ready</p>
-        </div>
-
-        <div className="bg-white rounded-xl p-8 border-3 border-amber-300 mb-8 shadow-lg">
-          <p className="text-xs font-bold text-amber-600 mb-4 uppercase tracking-widest">📋 Tender Link (Share This)</p>
-          <div className="flex gap-3 items-stretch mb-4">
-            <input
-              type="text"
-              value={tenderUrl}
-              readOnly
-              className="flex-1 px-5 py-4 bg-amber-50 border-2 border-amber-200 rounded-lg font-mono text-base text-slate-900 font-bold"
-            />
-            <button
-              onClick={copyToClipboard}
-              className={`px-6 py-4 font-bold rounded-lg transition whitespace-nowrap ${
-                copied
-                  ? "bg-green-600 text-white"
-                  : "bg-amber-600 text-white hover:bg-amber-700"
-              }`}
-            >
-              {copied ? "✓ Copied!" : "Copy"}
-            </button>
-          </div>
-          <p className="text-sm text-slate-600">✓ Vendors use this link to submit bids</p>
-        </div>
-
-        <div className="grid grid-cols-2 gap-4">
-          <Link
-            href={`/tender/${address}`}
-            className="text-center px-6 py-4 bg-amber-600 text-white rounded-lg font-bold hover:bg-amber-700 transition"
-          >
-            View Tender
-          </Link>
-          <Link
-            href="/dashboard"
-            className="text-center px-6 py-4 border-2 border-amber-600 text-amber-700 rounded-lg font-bold hover:bg-amber-50 transition"
-          >
-            Dashboard
-          </Link>
-        </div>
-      </div>
-    </div>
   );
 }
