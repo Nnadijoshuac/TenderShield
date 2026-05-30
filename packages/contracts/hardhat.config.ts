@@ -5,6 +5,7 @@ import "@typechain/hardhat";
 import "hardhat-deploy";
 import "solidity-coverage";
 import type { HardhatUserConfig } from "hardhat/config";
+import "dotenv/config";
 
 const PRIVATE_KEY = process.env.PRIVATE_KEY;
 const SEPOLIA_RPC_URL = process.env.SEPOLIA_RPC_URL ?? "https://ethereum-sepolia-rpc.publicnode.com";
