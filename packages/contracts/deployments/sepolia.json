@@ -1,1 +1,10 @@
-{}
+{
+  "chainId": 11155111,
+  "network": "sepolia",
+  "deployedAt": "2026-05-30T20:15:48.848Z",
+  "deployer": "0x5258f03F1615073183d53914D68D9d9C05C066B0",
+  "contracts": {
+    "TenderToken": "0x57F8851F29231Fe4309bFcB58d3FEfA5874aD943",
+    "TenderFactory": "0x50CDc43A04B7D75b09fC105E058D36175Ec76565"
+  }
+}
