@@ -1,13 +1,17 @@
 "use client";
 
-import { createConfig, http, injected } from "wagmi";
+import { getDefaultConfig } from "@rainbow-me/rainbowkit";
+import { http } from "wagmi";
 import { supportedChains } from "../config/chains";
 
-export const wagmiConfig = createConfig({
+const walletConnectProjectId =
+  process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID ?? "walletconnect-project-id-required";
+
+export const wagmiConfig = getDefaultConfig({
+  appName: "TenderShield",
+  projectId: walletConnectProjectId,
   ssr: true,
-  multiInjectedProviderDiscovery: true,
   chains: supportedChains,
-  connectors: [injected()],
   transports: {
     31337: http("http://127.0.0.1:8545"),
     11155111: http("https://ethereum-sepolia-rpc.publicnode.com"),

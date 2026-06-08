@@ -8,6 +8,7 @@
     "build": "next build"
   },
   "dependencies": {
+    "@rainbow-me/rainbowkit": "2.2.11",
     "@tanstack/react-query": "^5.90.2",
     "@zama-fhe/relayer-sdk": "0.4.3",
     "clsx": "^2.1.1",

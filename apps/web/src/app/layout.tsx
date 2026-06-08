@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Geist, Space_Grotesk } from "next/font/google";
 import { ConnectWalletButton } from "../components/ConnectWalletButton";
+import "@rainbow-me/rainbowkit/styles.css";
 import "./globals.css";
 import { Providers } from "./providers";
 
