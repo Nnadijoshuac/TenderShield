@@ -33,7 +33,6 @@ export function ConnectWalletButton() {
     error: connectError,
     isPending: isConnecting,
     reset: resetConnect,
-    variables: connectVariables,
   } = useConnect();
   const { disconnect } = useDisconnect();
   const {
@@ -46,6 +45,7 @@ export function ConnectWalletButton() {
   const [connectOpen, setConnectOpen] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [pendingConnectorUid, setPendingConnectorUid] = useState<string>();
 
   const walletOptions = useMemo(() => {
     const seen = new Set<string>();
@@ -80,11 +80,14 @@ export function ConnectWalletButton() {
 
   async function connectWallet(connector: (typeof connectors)[number]) {
     resetConnect();
+    setPendingConnectorUid(connector.uid);
     try {
       await connectAsync({ connector, chainId: addresses.chainId });
       setConnectOpen(false);
     } catch {
       // Wagmi exposes the user-facing error in connectError.
+    } finally {
+      setPendingConnectorUid(undefined);
     }
   }
 
@@ -236,7 +239,7 @@ export function ConnectWalletButton() {
 
               <div className="mt-6 space-y-3">
                 {walletOptions.map((connector) => {
-                  const pending = isConnecting && connectVariables?.connector.uid === connector.uid;
+                  const pending = isConnecting && pendingConnectorUid === connector.uid;
                   return (
                     <button
                       key={connector.uid}
@@ -309,5 +312,5 @@ function friendlyWalletError(error: Error) {
   if (message.includes("connector not connected") || message.includes("provider not found")) {
     return "The selected wallet is unavailable. Unlock it or refresh the page.";
   }
-  return error.shortMessage ?? "The wallet could not connect. Please try again.";
+  return (error as Error & { shortMessage?: string }).shortMessage ?? "The wallet could not connect. Please try again.";
 }
