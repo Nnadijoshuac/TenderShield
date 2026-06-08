@@ -5,7 +5,7 @@ import { http } from "wagmi";
 import { supportedChains } from "../config/chains";
 
 const walletConnectProjectId =
-  process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID ?? "walletconnect-project-id-required";
+  process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || "00000000000000000000000000000000";
 
 export const wagmiConfig = getDefaultConfig({
   appName: "TenderShield",
