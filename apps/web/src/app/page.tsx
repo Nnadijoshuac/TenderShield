@@ -1,95 +1,95 @@
 import Link from "next/link";
-import { ArrowRight, Lock, CheckCircle2, Code2 } from "lucide-react";
+import { ArrowRight, CheckCircle2, Code2, Lock } from "lucide-react";
+
+const features = [
+  {
+    icon: Lock,
+    title: "Bid Privacy",
+    desc: "Supplier bids stay encrypted end-to-end. Only the winning result is revealed.",
+  },
+  {
+    icon: CheckCircle2,
+    title: "Verifiable Results",
+    desc: "Smart contracts verify that the correct winner was selected with FHE operations.",
+  },
+  {
+    icon: Code2,
+    title: "FHE Computation",
+    desc: "TenderShield compares encrypted data without exposing confidential quotes.",
+  },
+];
+
+const steps = [
+  { step: "1", title: "Create", desc: "The issuer creates a tender round." },
+  { step: "2", title: "Encrypt", desc: "Suppliers submit encrypted bids." },
+  { step: "3", title: "Compare", desc: "The contract finds the minimum privately." },
+  { step: "4", title: "Reveal", desc: "The winner is announced securely." },
+];
 
 export default function HomePage() {
   return (
-    <div className="relative space-y-16">
-      <section className="relative border border-slate-200 bg-white px-8 py-20">
-        <div className="max-w-3xl">
-          <div className="mb-6">
-            <span className="inline-block px-3 py-1 rounded-full bg-[color:var(--accent-soft)] text-[color:var(--accent-ink)] text-sm font-semibold">
-              Built on Zama FHEVM
-            </span>
-          </div>
-
-          <h1 className="text-5xl sm:text-6xl font-bold mb-6 leading-tight text-slate-900">
-            Private Encryption
+    <div className="space-y-16">
+      <section className="overflow-hidden rounded-3xl border border-yellow-200 bg-white px-6 py-16 shadow-[var(--shadow)] sm:px-12 sm:py-20">
+        <div className="max-w-4xl">
+          <span className="mb-6 inline-flex rounded-full bg-[color:var(--accent-soft)] px-4 py-2 text-sm font-semibold text-[color:var(--accent-ink)]">
+            Built on Zama FHEVM
+          </span>
+          <h1 className="mb-6 text-4xl font-bold leading-[1.05] text-slate-950 sm:text-6xl lg:text-7xl">
+            Private procurement
             <br />
-            On The Blockchain
+            on the blockchain.
           </h1>
-
-          <p className="text-xl text-slate-600 mb-8 max-w-2xl leading-relaxed">
-            Cipher uses Zama's fully homomorphic encryption to enable truly private encrypted procurement. Supplier bids stay encrypted. Winner selection happens on encrypted data. Only the winner is revealed.
+          <p className="mb-8 max-w-2xl text-lg leading-relaxed text-slate-600 sm:text-xl">
+            TenderShield keeps supplier bids private while smart contracts select a transparent, verifiable winner.
           </p>
-
-          <div className="flex flex-col sm:flex-row gap-4">
-            <Link href="/create" className="group inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-[color:var(--accent)] text-[color:var(--accent-ink)] font-semibold transition hover:opacity-90">
-              Create Encryption <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition" />
+          <div className="flex flex-col gap-4 sm:flex-row">
+            <Link href="/create" className="group inline-flex items-center justify-center gap-2 rounded-xl bg-[color:var(--accent)] px-6 py-3.5 font-semibold text-[color:var(--accent-ink)] shadow-sm transition hover:bg-[color:var(--accent-hover)]">
+              Create a tender
+              <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
             </Link>
-            <Link href="/demo" className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg border border-[color:var(--accent)] text-[color:var(--accent-ink)] font-semibold hover:bg-[color:var(--accent-soft)] transition">
-              Watch Demo
+            <Link href="/demo" className="inline-flex items-center justify-center rounded-xl border border-slate-300 bg-white px-6 py-3.5 font-semibold text-slate-800 transition hover:border-[color:var(--accent)] hover:bg-[color:var(--accent-soft)]">
+              See how it works
             </Link>
           </div>
         </div>
       </section>
 
-      <section className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-8 border-t border-slate-200">
-        {[
-          {
-            icon: Lock,
-            title: "Bid Privacy",
-            desc: "All supplier bids encrypted end-to-end. Only winners reveal their amounts."
-          },
-          {
-            icon: CheckCircle2,
-            title: "Verifiable Results",
-            desc: "Smart contracts prove correct winner was selected using FHE operations."
-          },
-          {
-            icon: Code2,
-            title: "FHE Computation",
-            desc: "Winner found on encrypted data. Zama FHEVM enables privacy without intermediaries."
-          }
-        ].map((feature, i) => (
-          <div key={i} className="relative border border-slate-200 bg-slate-50 p-6 hover:bg-slate-100 transition">
-            <feature.icon className="w-8 h-8 text-[color:var(--accent-ink)] mb-4" />
-            <h3 className="text-lg font-bold mb-2 text-slate-900">{feature.title}</h3>
-            <p className="text-slate-600 text-sm leading-relaxed">{feature.desc}</p>
+      <section className="grid grid-cols-1 gap-6 md:grid-cols-3">
+        {features.map((feature) => (
+          <div key={feature.title} className="rounded-2xl border border-slate-200 bg-white p-7 shadow-sm transition hover:-translate-y-1 hover:border-yellow-300 hover:shadow-lg">
+            <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-[color:var(--accent-soft)]">
+              <feature.icon className="h-6 w-6 text-[color:var(--accent-ink)]" />
+            </div>
+            <h2 className="mb-2 text-lg font-bold text-slate-900">{feature.title}</h2>
+            <p className="text-sm leading-relaxed text-slate-600">{feature.desc}</p>
           </div>
         ))}
       </section>
 
-      <section className="relative border border-slate-200 bg-slate-50 p-8 sm:p-12">
-        <h2 className="text-3xl font-bold mb-8 text-slate-900">How Cipher Works</h2>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          {[
-            { step: "1", title: "Create", desc: "Issuer creates encryption round" },
-            { step: "2", title: "Encrypt", desc: "Suppliers submit encrypted bids" },
-            { step: "3", title: "Compare", desc: "Contract finds min on encrypted data" },
-            { step: "4", title: "Reveal", desc: "Winner announced, others stay secret" }
-          ].map((item, i) => (
-            <div key={i} className="relative">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="flex items-center justify-center w-10 h-10 rounded-full bg-[color:var(--accent)] text-[color:var(--accent-ink)] font-bold text-sm">
-                  {item.step}
-                </div>
+      <section className="rounded-3xl border border-slate-200 bg-[color:var(--panel)] p-8 sm:p-12">
+        <h2 className="mb-8 text-3xl font-bold text-slate-900">How TenderShield works</h2>
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-4 md:gap-6">
+          {steps.map((item, index) => (
+            <div key={item.step} className="relative">
+              <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-[color:var(--accent)] text-sm font-bold text-[color:var(--accent-ink)]">
+                {item.step}
               </div>
-              <h4 className="font-semibold text-slate-900 mb-1">{item.title}</h4>
-              <p className="text-sm text-slate-600">{item.desc}</p>
-              {i < 3 && <div className="hidden md:block absolute top-5 -right-3 text-slate-300">→</div>}
+              <h3 className="mb-1 font-semibold text-slate-900">{item.title}</h3>
+              <p className="text-sm leading-relaxed text-slate-600">{item.desc}</p>
+              {index < steps.length - 1 && <ArrowRight className="absolute -right-3 top-3 hidden h-5 w-5 text-yellow-500 md:block" />}
             </div>
           ))}
         </div>
       </section>
 
-      <section className="relative border border-slate-200 bg-white p-8 sm:p-12">
-        <h2 className="text-2xl font-bold mb-6 text-slate-900">Why Cipher Matters</h2>
-        <div className="space-y-4">
-          <p className="text-slate-600 leading-relaxed">
-            Traditional blockchains leak every bid. Competitors see quotes. Prices are driven down. Privacy is impossible.
+      <section className="rounded-3xl border border-slate-200 bg-white p-8 sm:p-12">
+        <h2 className="mb-6 text-2xl font-bold text-slate-900">Why TenderShield matters</h2>
+        <div className="max-w-3xl space-y-4 text-slate-600">
+          <p className="leading-relaxed">
+            Traditional blockchains expose every bid, making confidential procurement difficult.
           </p>
-          <p className="text-slate-600 leading-relaxed">
-            <strong>Cipher changes this.</strong> Using Zama's fully homomorphic encryption (FHE), we find the lowest bid without ever decrypting it. Losing bids stay encrypted forever. True sealed-bid privacy on-chain.
+          <p className="leading-relaxed">
+            <strong className="text-slate-900">TenderShield changes this.</strong> Zama FHE lets the contract find the lowest bid without decrypting losing quotes. Private bids stay private.
           </p>
         </div>
       </section>
