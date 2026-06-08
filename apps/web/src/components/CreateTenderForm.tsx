@@ -4,6 +4,7 @@ import { CheckCircle2, Wallet } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
+import { sepolia } from "viem/chains";
 import { useAccount, usePublicClient, useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import { addresses } from "../config/addresses";
 import { tenderFactoryAbi } from "../lib/contracts";
@@ -22,7 +23,7 @@ export function CreateTenderForm() {
   const [bidBond, setBidBond] = useState("");
   const [maxBudget, setMaxBudget] = useState("");
   const [showSuccess, setShowSuccess] = useState(false);
-  const { writeContractAsync, data: hash, isPending, error } = useWriteContract({ chainId: addresses.chainId });
+  const { writeContractAsync, data: hash, isPending, error } = useWriteContract();
   const [prepareError, setPrepareError] = useState<string>();
   const [isPreparing, setIsPreparing] = useState(false);
   const receipt = useWaitForTransactionReceipt({ hash });
@@ -46,21 +47,32 @@ export function CreateTenderForm() {
     ] as const;
 
     try {
-      const estimatedGas = await publicClient.estimateContractGas({
-        account: address,
-        address: addresses.tenderFactory,
-        abi: tenderFactoryAbi,
-        functionName: "createTender",
-        args,
-      });
+      let gasLimit: bigint | undefined;
+      
+      if (publicClient) {
+        try {
+          const estimatedGas = await publicClient.estimateContractGas({
+            account: address,
+            address: addresses.tenderFactory,
+            abi: tenderFactoryAbi,
+            functionName: "createTender",
+            args,
+          });
+          gasLimit = (estimatedGas * 120n) / 100n;
+        } catch (gasError) {
+          console.warn("Gas estimation failed, proceeding without pre-estimated gas:", gasError);
+          // Continue without gas estimation - Wagmi will estimate it
+        }
+      }
 
       await writeContractAsync({
+        chain: sepolia,
         chainId: addresses.chainId,
         address: addresses.tenderFactory,
         abi: tenderFactoryAbi,
         functionName: "createTender",
         args,
-        gas: (estimatedGas * 120n) / 100n,
+        ...(gasLimit && { gas: gasLimit }),
       });
     } catch (submissionError) {
       setPrepareError(formatSubmissionError(submissionError));

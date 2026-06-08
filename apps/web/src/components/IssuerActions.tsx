@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { sepolia } from "viem/chains";
 import { usePublicClient, useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import { addresses } from "../config/addresses";
 import { reverseTenderAbi } from "../lib/contracts";
@@ -19,18 +20,18 @@ export function IssuerActions({
   canFinalize: boolean;
 }) {
   const publicClient = usePublicClient({ chainId: addresses.chainId });
-  const { writeContractAsync, data: hash } = useWriteContract({ chainId: addresses.chainId });
+  const { writeContractAsync, data: hash } = useWriteContract();
   const receipt = useWaitForTransactionReceipt({ hash });
   const [message, setMessage] = useState<string>();
 
   async function closeTender() {
     setMessage("Closing tender and computing encrypted minimum...");
-    await writeContractAsync({ chainId: addresses.chainId, address: tenderAddress, abi: reverseTenderAbi, functionName: "closeTender" });
+    await writeContractAsync({ chain: sepolia, chainId: addresses.chainId, address: tenderAddress, abi: reverseTenderAbi, functionName: "closeTender" });
   }
 
   async function requestReveal() {
     setMessage("Marking result handles as publicly decryptable...");
-    await writeContractAsync({ chainId: addresses.chainId, address: tenderAddress, abi: reverseTenderAbi, functionName: "requestReveal" });
+    await writeContractAsync({ chain: sepolia, chainId: addresses.chainId, address: tenderAddress, abi: reverseTenderAbi, functionName: "requestReveal" });
   }
 
   async function finalizeTender() {
@@ -47,6 +48,7 @@ export function IssuerActions({
     setMessage("Finalizing winner selection onchain...");
 
     await writeContractAsync({
+      chain: sepolia,
       chainId: addresses.chainId,
       address: tenderAddress,
       abi: reverseTenderAbi,
@@ -71,10 +73,10 @@ export function IssuerActions({
         </button>
       </div>
       <div className="mt-4 flex flex-wrap gap-3">
-        <button onClick={() => writeContractAsync({ chainId: addresses.chainId, address: tenderAddress, abi: reverseTenderAbi, functionName: "claimRefund" })} className="rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm font-medium text-slate-700 transition hover:border-yellow-300 hover:bg-[color:var(--panel)]">
+        <button onClick={() => writeContractAsync({ chain: sepolia, chainId: addresses.chainId, address: tenderAddress, abi: reverseTenderAbi, functionName: "claimRefund" })} className="rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm font-medium text-slate-700 transition hover:border-yellow-300 hover:bg-[color:var(--panel)]">
           Claim refund
         </button>
-        <button onClick={() => writeContractAsync({ chainId: addresses.chainId, address: tenderAddress, abi: reverseTenderAbi, functionName: "claimAward" })} className="rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm font-medium text-slate-700 transition hover:border-yellow-300 hover:bg-[color:var(--panel)]">
+        <button onClick={() => writeContractAsync({ chain: sepolia, chainId: addresses.chainId, address: tenderAddress, abi: reverseTenderAbi, functionName: "claimAward" })} className="rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm font-medium text-slate-700 transition hover:border-yellow-300 hover:bg-[color:var(--panel)]">
           Claim award
         </button>
       </div>

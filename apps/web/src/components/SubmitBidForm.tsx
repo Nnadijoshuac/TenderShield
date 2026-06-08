@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useAccount, usePublicClient, useWaitForTransactionReceipt, useWriteContract } from "wagmi";
+import { sepolia } from "viem/chains";
 import { addresses } from "../config/addresses";
 import { reverseTenderAbi } from "../lib/contracts";
 import { encryptBid } from "../lib/fhe";
@@ -12,7 +13,7 @@ export function SubmitBidForm({ tenderAddress, isOpen }: { tenderAddress: `0x${s
   const publicClient = usePublicClient({ chainId: addresses.chainId });
   const [bidAmount, setBidAmount] = useState("350");
   const [message, setMessage] = useState<string>();
-  const { writeContractAsync, data: hash } = useWriteContract({ chainId: addresses.chainId });
+  const { writeContractAsync, data: hash } = useWriteContract();
   const receipt = useWaitForTransactionReceipt({ hash });
 
   async function onSubmit() {
@@ -23,6 +24,7 @@ export function SubmitBidForm({ tenderAddress, isOpen }: { tenderAddress: `0x${s
     setMessage("Submitting encrypted bid onchain...");
 
     await writeContractAsync({
+      chain: sepolia,
       chainId: addresses.chainId,
       address: tenderAddress,
       abi: reverseTenderAbi,
