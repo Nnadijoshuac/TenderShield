@@ -19,7 +19,7 @@ export function IssuerActions({
   canFinalize: boolean;
 }) {
   const publicClient = usePublicClient({ chainId: addresses.chainId });
-  const { writeContractAsync, data: hash } = useWriteContract();
+  const { writeContractAsync, data: hash } = useWriteContract({ chainId: addresses.chainId });
   const receipt = useWaitForTransactionReceipt({ hash });
   const [message, setMessage] = useState<string>();
 

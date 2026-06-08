@@ -12,7 +12,7 @@ export function SubmitBidForm({ tenderAddress, isOpen }: { tenderAddress: `0x${s
   const publicClient = usePublicClient({ chainId: addresses.chainId });
   const [bidAmount, setBidAmount] = useState("350");
   const [message, setMessage] = useState<string>();
-  const { writeContractAsync, data: hash } = useWriteContract();
+  const { writeContractAsync, data: hash } = useWriteContract({ chainId: addresses.chainId });
   const receipt = useWaitForTransactionReceipt({ hash });
 
   async function onSubmit() {

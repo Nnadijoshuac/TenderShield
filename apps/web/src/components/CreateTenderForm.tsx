@@ -4,7 +4,7 @@ import { CheckCircle2, Wallet } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
-import { useAccount, useWaitForTransactionReceipt, useWriteContract } from "wagmi";
+import { useAccount, usePublicClient, useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import { addresses } from "../config/addresses";
 import { tenderFactoryAbi } from "../lib/contracts";
 import { TransactionToast } from "./TransactionToast";
@@ -15,36 +15,58 @@ const inputClassName =
 export function CreateTenderForm() {
   const router = useRouter();
   const { address } = useAccount();
+  const publicClient = usePublicClient({ chainId: addresses.chainId });
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [deadline, setDeadline] = useState("");
   const [bidBond, setBidBond] = useState("");
   const [maxBudget, setMaxBudget] = useState("");
   const [showSuccess, setShowSuccess] = useState(false);
-  const { writeContract, data: hash, isPending, error } = useWriteContract();
+  const { writeContractAsync, data: hash, isPending, error } = useWriteContract({ chainId: addresses.chainId });
+  const [prepareError, setPrepareError] = useState<string>();
+  const [isPreparing, setIsPreparing] = useState(false);
   const receipt = useWaitForTransactionReceipt({ hash });
 
   const isReady = useMemo(() => !!addresses.tenderFactory && !!address, [address]);
   const formValid = title && description && deadline && bidBond && maxBudget;
 
-  function onSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!addresses.tenderFactory || !formValid) return;
+    if (!addresses.tenderFactory || !address || !publicClient || !formValid) return;
 
-    writeContract({
-      chainId: addresses.chainId,
-      address: addresses.tenderFactory,
-      abi: tenderFactoryAbi,
-      functionName: "createTender",
-      args: [
-        title,
-        description,
-        BigInt(Math.floor(new Date(deadline).getTime() / 1000)),
-        BigInt(Number(bidBond)),
-        BigInt(Number(maxBudget)),
-        (addresses.tenderToken ?? "0x0000000000000000000000000000000000000000") as `0x${string}`,
-      ],
-    });
+    setPrepareError(undefined);
+    setIsPreparing(true);
+    const args = [
+      title,
+      description,
+      BigInt(Math.floor(new Date(deadline).getTime() / 1000)),
+      BigInt(Number(bidBond)),
+      BigInt(Number(maxBudget)),
+      (addresses.tenderToken ?? "0x0000000000000000000000000000000000000000") as `0x${string}`,
+    ] as const;
+
+    try {
+      const estimatedGas = await publicClient.estimateContractGas({
+        account: address,
+        address: addresses.tenderFactory,
+        abi: tenderFactoryAbi,
+        functionName: "createTender",
+        args,
+      });
+
+      await writeContractAsync({
+        chainId: addresses.chainId,
+        address: addresses.tenderFactory,
+        abi: tenderFactoryAbi,
+        functionName: "createTender",
+        args,
+        gas: (estimatedGas * 120n) / 100n,
+      });
+    } catch (submissionError) {
+      setPrepareError(formatSubmissionError(submissionError));
+    } finally {
+      setIsPreparing(false);
+    }
   }
 
   useEffect(() => {
@@ -99,13 +121,13 @@ export function CreateTenderForm() {
         </div>
       </div>
 
-      <button type="submit" disabled={!formValid || isPending} className="w-full rounded-xl bg-[color:var(--accent)] px-6 py-4 font-semibold text-[color:var(--accent-ink)] shadow-sm transition hover:bg-[color:var(--accent-hover)] disabled:cursor-not-allowed disabled:opacity-50">
-        {isPending ? "Creating tender..." : "Create tender"}
+      <button type="submit" disabled={!formValid || isPreparing || isPending} className="w-full rounded-xl bg-[color:var(--accent)] px-6 py-4 font-semibold text-[color:var(--accent-ink)] shadow-sm transition hover:bg-[color:var(--accent-hover)] disabled:cursor-not-allowed disabled:opacity-50">
+        {isPreparing ? "Preparing transaction..." : isPending ? "Confirm in wallet..." : "Create tender"}
       </button>
 
-      {error && (
+      {(prepareError || error) && (
         <div role="alert" className="rounded-xl border border-red-300 bg-red-50 p-4">
-          <p className="text-sm text-red-800">{error.message}</p>
+          <p className="text-sm text-red-800">{prepareError ?? error?.message}</p>
         </div>
       )}
 
@@ -123,4 +145,21 @@ export function CreateTenderForm() {
       <TransactionToast message={receipt.isSuccess ? "Tender created successfully." : undefined} />
     </form>
   );
+}
+
+function formatSubmissionError(error: unknown) {
+  if (!(error instanceof Error)) return "The transaction could not be prepared. Please try again.";
+
+  const message = error.message.toLowerCase();
+  if (message.includes("user rejected") || message.includes("user denied")) {
+    return "The transaction was cancelled in your wallet.";
+  }
+  if (message.includes("insufficient funds")) {
+    return "Your wallet needs Sepolia ETH to pay the transaction gas fee.";
+  }
+  if (message.includes("too many errors") || message.includes("requested resource not available")) {
+    return "The Sepolia RPC is temporarily unavailable. Please retry in a moment.";
+  }
+
+  return (error as Error & { shortMessage?: string }).shortMessage ?? error.message;
 }
