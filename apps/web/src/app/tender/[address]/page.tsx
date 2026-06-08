@@ -55,15 +55,15 @@ export default async function EncryptionDetailPage({ params }: { params: Promise
   const isOpen = !encryption.closed;
 
   return (
-    <div className="grid gap-8 lg:grid-cols-[1.1fr,0.9fr]">
+    <div className="grid items-start gap-8 lg:grid-cols-[1.1fr,0.9fr]">
       <section className="space-y-6">
-        <div className="rounded-lg border border-slate-200 bg-slate-50 p-8">
+        <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
           <div className="flex flex-wrap items-start justify-between gap-4 mb-6">
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-3">
-                <span className="px-3 py-1 rounded-full bg-slate-200 border border-slate-300 text-xs font-semibold text-slate-900 uppercase tracking-wider">Active Encryption</span>
+                <span className="rounded-full border border-yellow-300 bg-[color:var(--accent-soft)] px-3 py-1 text-xs font-semibold uppercase tracking-wider text-[color:var(--accent-ink)]">Private tender</span>
               </div>
-              <h1 className="text-4xl font-bold text-slate-900 mb-3">{encryption.title}</h1>
+              <h1 className="mb-3 text-3xl font-bold text-slate-900 sm:text-4xl">{encryption.title}</h1>
               <p className="text-slate-600 leading-relaxed">{encryption.descriptionURI}</p>
             </div>
             <TenderStatusBadge closed={encryption.closed} revealRequested={encryption.revealRequested} finalized={encryption.finalized} />
@@ -75,7 +75,7 @@ export default async function EncryptionDetailPage({ params }: { params: Promise
               { label: "Bids Received", value: encryption.bidCount.toString() },
               { label: "Status", value: encryption.finalized ? "Revealed" : "Encrypted" }
             ].map((item, i) => (
-              <div key={i} className="rounded-lg border border-slate-200 bg-slate-100 p-4">
+              <div key={item.label} className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
                 <div className="text-xs text-slate-600 font-semibold">{item.label}</div>
                 <div className="mt-2 font-semibold text-slate-900">{item.value}</div>
               </div>
@@ -84,7 +84,7 @@ export default async function EncryptionDetailPage({ params }: { params: Promise
         </div>
 
         {encryption.bids.length > 0 && (
-          <div className="rounded-lg border border-slate-200 bg-slate-50 p-8">
+          <div className="rounded-3xl border border-slate-200 bg-slate-50 p-6 sm:p-8">
             <h3 className="text-xl font-bold text-slate-900 mb-4">Encrypted Bids</h3>
             <div className="grid gap-4 md:grid-cols-2">
               {encryption.bids.map((bidder, index) => (
@@ -95,7 +95,7 @@ export default async function EncryptionDetailPage({ params }: { params: Promise
         )}
       </section>
 
-      <section className="space-y-6">
+      <section className="space-y-6 lg:sticky lg:top-28">
         <SubmitBidForm tenderAddress={encryptionAddress} isOpen={isOpen} />
         <IssuerActions tenderAddress={encryptionAddress} canClose={!encryption.closed} canReveal={encryption.closed && !encryption.revealRequested} canFinalize={encryption.revealRequested && !encryption.finalized} />
         {encryption.finalized && <ResultCard winner={encryption.winner} winningBid={encryption.winningBid} />}

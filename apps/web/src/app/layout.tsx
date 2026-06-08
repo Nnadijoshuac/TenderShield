@@ -56,9 +56,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     <p className="text-sm font-semibold text-slate-800">TenderShield</p>
                     <p className="text-xs text-slate-500 mt-1">Powered by <span className="font-semibold text-[color:var(--accent-ink)]">Zama FHEVM</span></p>
                   </div>
-                  <div className="sm:text-right">
-                    <p className="text-xs text-slate-500">Privacy by Design</p>
-                  </div>
                 </div>
               </div>
             </footer>

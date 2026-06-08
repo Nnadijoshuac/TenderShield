@@ -54,25 +54,26 @@ export function IssuerActions({
   }
 
   return (
-    <div className="border border-slate-200 bg-white p-6">
-      <div className="mb-4 text-sm text-[color:var(--muted)]">Close. reveal. finalize.</div>
-      <div className="flex flex-wrap gap-3">
-        <button disabled={!canClose} onClick={closeTender} className="border border-[color:var(--accent)] bg-[color:var(--accent)] px-4 py-3 text-sm font-medium text-black disabled:opacity-50">
+    <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+      <h2 className="mb-1 text-lg font-bold text-slate-900">Issuer actions</h2>
+      <p className="mb-5 text-sm text-[color:var(--muted)]">Progress the tender through closing, reveal, and finalization.</p>
+      <div className="grid gap-3 sm:grid-cols-3">
+        <button disabled={!canClose} onClick={closeTender} className="rounded-xl border border-[color:var(--accent)] bg-[color:var(--accent)] px-4 py-3 text-sm font-semibold text-[color:var(--accent-ink)] transition hover:bg-[color:var(--accent-hover)] disabled:cursor-not-allowed disabled:opacity-40">
           Close Tender
         </button>
-        <button disabled={!canReveal} onClick={requestReveal} className="border border-[color:var(--accent)] bg-[color:var(--accent)] px-4 py-3 text-sm font-medium text-black disabled:opacity-50">
+        <button disabled={!canReveal} onClick={requestReveal} className="rounded-xl border border-[color:var(--accent)] bg-[color:var(--accent)] px-4 py-3 text-sm font-semibold text-[color:var(--accent-ink)] transition hover:bg-[color:var(--accent-hover)] disabled:cursor-not-allowed disabled:opacity-40">
           Reveal
         </button>
-        <button disabled={!canFinalize} onClick={finalizeTender} className="border border-[color:var(--accent)] bg-[color:var(--accent)] px-4 py-3 text-sm font-medium text-black disabled:opacity-50">
+        <button disabled={!canFinalize} onClick={finalizeTender} className="rounded-xl border border-[color:var(--accent)] bg-[color:var(--accent)] px-4 py-3 text-sm font-semibold text-[color:var(--accent-ink)] transition hover:bg-[color:var(--accent-hover)] disabled:cursor-not-allowed disabled:opacity-40">
           Finalize
         </button>
       </div>
       <div className="mt-4 flex flex-wrap gap-3">
-        <button onClick={() => writeContractAsync({ address: tenderAddress, abi: reverseTenderAbi, functionName: "claimRefund" })} className="border border-slate-300 bg-white px-4 py-3 text-sm text-slate-600">
-          Refund
+        <button onClick={() => writeContractAsync({ address: tenderAddress, abi: reverseTenderAbi, functionName: "claimRefund" })} className="rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm font-medium text-slate-700 transition hover:border-yellow-300 hover:bg-[color:var(--panel)]">
+          Claim refund
         </button>
-        <button onClick={() => writeContractAsync({ address: tenderAddress, abi: reverseTenderAbi, functionName: "claimAward" })} className="border border-slate-300 bg-white px-4 py-3 text-sm text-slate-600">
-          Award
+        <button onClick={() => writeContractAsync({ address: tenderAddress, abi: reverseTenderAbi, functionName: "claimAward" })} className="rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm font-medium text-slate-700 transition hover:border-yellow-300 hover:bg-[color:var(--panel)]">
+          Claim award
         </button>
       </div>
       <TransactionToast message={receipt.isSuccess ? "Transaction confirmed." : message} />

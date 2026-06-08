@@ -1,23 +1,25 @@
 "use client";
 
+import { CheckCircle2, Wallet } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
-import { useAccount, usePublicClient, useWaitForTransactionReceipt, useWriteContract } from "wagmi";
+import { useAccount, useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import { addresses } from "../config/addresses";
 import { tenderFactoryAbi } from "../lib/contracts";
 import { TransactionToast } from "./TransactionToast";
 
+const inputClassName =
+  "w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 placeholder-slate-400 transition focus:border-yellow-400 focus:outline-none focus:ring-4 focus:ring-yellow-100";
+
 export function CreateTenderForm() {
   const router = useRouter();
-  const publicClient = usePublicClient();
   const { address } = useAccount();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [deadline, setDeadline] = useState("");
   const [bidBond, setBidBond] = useState("");
   const [maxBudget, setMaxBudget] = useState("");
-  const [createdTenderAddress, setCreatedTenderAddress] = useState<`0x${string}`>();
   const [showSuccess, setShowSuccess] = useState(false);
   const { writeContract, data: hash, isPending, error } = useWriteContract();
   const receipt = useWaitForTransactionReceipt({ hash });
@@ -25,8 +27,8 @@ export function CreateTenderForm() {
   const isReady = useMemo(() => !!addresses.tenderFactory && !!address, [address]);
   const formValid = title && description && deadline && bidBond && maxBudget;
 
-  function onSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
+  function onSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
     if (!addresses.tenderFactory || !formValid) return;
 
     writeContract({
@@ -45,130 +47,79 @@ export function CreateTenderForm() {
   }
 
   useEffect(() => {
-    if (receipt.isSuccess) {
-      setShowSuccess(true);
-      // Redirect to dashboard after 3 seconds
-      setTimeout(() => {
-        router.push("/dashboard");
-      }, 3000);
-    }
+    if (!receipt.isSuccess) return;
+
+    setShowSuccess(true);
+    const timeout = window.setTimeout(() => router.push("/dashboard"), 3000);
+    return () => window.clearTimeout(timeout);
   }, [receipt.isSuccess, router]);
 
   if (!isReady) {
     return (
-      <div className="rounded-lg border border-slate-300 bg-slate-50 p-8 text-center">
-        <p className="text-slate-600">Connect your wallet to create a tender</p>
+      <div className="rounded-3xl border border-dashed border-yellow-400 bg-[color:var(--panel)] p-10 text-center">
+        <Wallet className="mx-auto mb-4 h-8 w-8 text-[color:var(--accent-ink)]" />
+        <p className="font-semibold text-slate-900">Connect your wallet to create a tender</p>
       </div>
     );
   }
 
   return (
     <form onSubmit={onSubmit} className="space-y-8">
-      <div className="rounded-lg border border-slate-200 bg-white p-8">
-        {/* Title */}
+      <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
         <div className="mb-8">
-          <label className="block text-sm font-semibold text-slate-900 mb-2">
-            Procurement Title *
-          </label>
-          <input
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder="e.g., Procurement for 50 laptops"
-            className="w-full px-4 py-3 border border-slate-300 rounded-lg text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#FFD208] focus:border-transparent"
-          />
-          <p className="text-xs text-slate-500 mt-1">A clear title for your procurement round</p>
+          <label htmlFor="title" className="mb-2 block text-sm font-semibold text-slate-900">Procurement title *</label>
+          <input id="title" type="text" value={title} onChange={(event) => setTitle(event.target.value)} placeholder="e.g. Procurement for 50 laptops" className={inputClassName} required />
+          <p className="mt-2 text-xs text-slate-500">A clear title for your procurement round.</p>
         </div>
 
-        {/* Description */}
         <div className="mb-8">
-          <label className="block text-sm font-semibold text-slate-900 mb-2">
-            Description *
-          </label>
-          <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            placeholder="Describe what you're procuring, specifications, and requirements..."
-            rows={4}
-            className="w-full px-4 py-3 border border-slate-300 rounded-lg text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#FFD208] focus:border-transparent resize-none"
-          />
-          <p className="text-xs text-slate-500 mt-1">Details suppliers need to understand your needs</p>
+          <label htmlFor="description" className="mb-2 block text-sm font-semibold text-slate-900">Description *</label>
+          <textarea id="description" value={description} onChange={(event) => setDescription(event.target.value)} placeholder="Describe the specifications and requirements..." rows={4} className={`${inputClassName} resize-none`} required />
+          <p className="mt-2 text-xs text-slate-500">Include the details suppliers need to prepare a bid.</p>
         </div>
 
-        {/* Deadline */}
         <div className="mb-8">
-          <label className="block text-sm font-semibold text-slate-900 mb-2">
-            Bid Deadline *
-          </label>
-          <input
-            type="datetime-local"
-            value={deadline}
-            onChange={(e) => setDeadline(e.target.value)}
-            className="w-full px-4 py-3 border border-slate-300 rounded-lg text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#FFD208] focus:border-transparent"
-          />
-          <p className="text-xs text-slate-500 mt-1">When bidding closes and evaluation starts</p>
+          <label htmlFor="deadline" className="mb-2 block text-sm font-semibold text-slate-900">Bid deadline *</label>
+          <input id="deadline" type="datetime-local" value={deadline} onChange={(event) => setDeadline(event.target.value)} className={inputClassName} required />
+          <p className="mt-2 text-xs text-slate-500">Bidding closes at this date and time.</p>
         </div>
 
-        {/* Bond & Budget */}
-        <div className="grid grid-cols-2 gap-6">
+        <div className="grid gap-6 sm:grid-cols-2">
           <div>
-            <label className="block text-sm font-semibold text-slate-900 mb-2">
-              Bid Bond (USD) *
-            </label>
-            <input
-              type="number"
-              value={bidBond}
-              onChange={(e) => setBidBond(e.target.value)}
-              placeholder="e.g., 25"
-              className="w-full px-4 py-3 border border-slate-300 rounded-lg text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#FFD208] focus:border-transparent"
-            />
-            <p className="text-xs text-slate-500 mt-1">Deposit required from bidders</p>
+            <label htmlFor="bidBond" className="mb-2 block text-sm font-semibold text-slate-900">Bid bond (USD) *</label>
+            <input id="bidBond" type="number" min="0" value={bidBond} onChange={(event) => setBidBond(event.target.value)} placeholder="e.g. 25" className={inputClassName} required />
+            <p className="mt-2 text-xs text-slate-500">Deposit required from bidders.</p>
           </div>
           <div>
-            <label className="block text-sm font-semibold text-slate-900 mb-2">
-              Budget Ceiling (USD) *
-            </label>
-            <input
-              type="number"
-              value={maxBudget}
-              onChange={(e) => setMaxBudget(e.target.value)}
-              placeholder="e.g., 600"
-              className="w-full px-4 py-3 border border-slate-300 rounded-lg text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#FFD208] focus:border-transparent"
-            />
-            <p className="text-xs text-slate-500 mt-1">Maximum you're willing to pay</p>
+            <label htmlFor="maxBudget" className="mb-2 block text-sm font-semibold text-slate-900">Budget ceiling (USD) *</label>
+            <input id="maxBudget" type="number" min="0" value={maxBudget} onChange={(event) => setMaxBudget(event.target.value)} placeholder="e.g. 600" className={inputClassName} required />
+            <p className="mt-2 text-xs text-slate-500">Maximum amount you are willing to pay.</p>
           </div>
         </div>
       </div>
 
-      {/* Submit Button */}
-      <button
-        type="submit"
-        disabled={!formValid || isPending}
-        className="w-full px-6 py-4 bg-[#FFD208] text-white font-semibold rounded-lg hover:bg-[#E6BB00] disabled:opacity-50 disabled:cursor-not-allowed transition"
-      >
-        {isPending ? "Creating Tender..." : "Create Tender"}
+      <button type="submit" disabled={!formValid || isPending} className="w-full rounded-xl bg-[color:var(--accent)] px-6 py-4 font-semibold text-[color:var(--accent-ink)] shadow-sm transition hover:bg-[color:var(--accent-hover)] disabled:cursor-not-allowed disabled:opacity-50">
+        {isPending ? "Creating tender..." : "Create tender"}
       </button>
 
-      {/* Error Display */}
       {error && (
-        <div className="rounded-lg border border-red-300 bg-red-50 p-4">
+        <div role="alert" className="rounded-xl border border-red-300 bg-red-50 p-4">
           <p className="text-sm text-red-800">{error.message}</p>
         </div>
       )}
 
-      {/* Success Display */}
       {showSuccess && (
-        <div className="mt-12 rounded-2xl border-4 border-[#FFD208] bg-gradient-to-br from-amber-50 via-yellow-50 to-orange-50 p-12 shadow-xl text-center">
-          <div className="text-6xl mb-4">✓</div>
-          <h2 className="text-4xl font-bold text-amber-900 mb-2">Tender Created!</h2>
-          <p className="text-lg text-amber-800 mb-8">Redirecting to your dashboard...</p>
-          <Link href="/dashboard" className="inline-block px-6 py-3 bg-[#FFD208] text-white rounded-lg font-bold hover:bg-[#E6BB00]">
-            Go to Dashboard
+        <div className="rounded-3xl border border-yellow-300 bg-[color:var(--panel)] p-8 text-center shadow-lg sm:p-12">
+          <CheckCircle2 className="mx-auto mb-4 h-14 w-14 text-[color:var(--accent-ink)]" />
+          <h2 className="mb-2 text-3xl font-bold text-slate-900">Tender created</h2>
+          <p className="mb-8 text-slate-600">Redirecting to your dashboard...</p>
+          <Link href="/dashboard" className="inline-block rounded-xl bg-[color:var(--accent)] px-6 py-3 font-bold text-[color:var(--accent-ink)] transition hover:bg-[color:var(--accent-hover)]">
+            Go to dashboard
           </Link>
         </div>
       )}
 
-      <TransactionToast message={receipt.isSuccess ? "Tender created! ✓" : error?.message} />
+      <TransactionToast message={receipt.isSuccess ? "Tender created successfully." : undefined} />
     </form>
   );
 }

@@ -14,11 +14,11 @@ export function TenderStatusBadge({
   return (
     <span
       className={cn(
-        "inline-flex border border-slate-300 bg-white px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.18em]",
+        "inline-flex rounded-full border border-slate-300 bg-white px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.14em]",
         finalized && "text-[color:var(--success)]",
-        !finalized && revealRequested && "text-[color:var(--accent)]",
+        !finalized && revealRequested && "border-yellow-300 bg-[color:var(--accent-soft)] text-[color:var(--accent-ink)]",
         !finalized && !revealRequested && closed && "text-slate-600",
-        !closed && "text-[color:var(--accent)]",
+        !closed && "border-yellow-300 bg-[color:var(--accent-soft)] text-[color:var(--accent-ink)]",
       )}
     >
       {label}
