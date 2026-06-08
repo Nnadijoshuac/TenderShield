@@ -15,19 +15,19 @@ export function ConnectWalletButton() {
   }, []);
 
   if (!mounted) {
-    return <button className="min-h-11 min-w-24 border border-slate-300 bg-white px-3 py-3 text-sm font-medium text-slate-900">Connect</button>;
+    return <button className="min-h-10 min-w-24 rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900">Connect</button>;
   }
 
   if (isConnected && address) {
     return (
-      <button className="min-h-11 min-w-24 border border-[color:var(--accent)] bg-[color:var(--accent)] px-3 py-3 text-center text-sm font-medium text-black" onClick={() => disconnect()}>
+      <button className="min-h-10 min-w-24 rounded-xl border border-[color:var(--accent)] bg-[color:var(--accent)] px-4 py-2 text-center text-sm font-semibold text-[color:var(--accent-ink)] transition hover:bg-[color:var(--accent-hover)]" onClick={() => disconnect()}>
         {shortAddress(address)}
       </button>
     );
   }
 
   return (
-    <button className="min-h-11 min-w-24 border border-slate-300 bg-white px-3 py-3 text-sm font-medium text-slate-900 disabled:opacity-50" onClick={() => connect({ connector: connectors[0] })} disabled={isPending}>
+    <button className="min-h-10 min-w-24 rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 transition hover:border-[color:var(--accent)] hover:bg-[color:var(--accent-soft)] disabled:opacity-50" onClick={() => connect({ connector: connectors[0] })} disabled={isPending}>
       {isPending ? "Connecting..." : "Connect"}
     </button>
   );

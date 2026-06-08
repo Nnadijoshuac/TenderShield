@@ -2,24 +2,23 @@
 
 :root {
   --bg: #ffffff;
-  --bg-deep: #f8fafc;
-  --panel: #f1f5f9;
+  --bg-deep: #fffdf5;
+  --panel: #fffbeb;
   --panel-soft: #e2e8f0;
   --copy: #0f172a;
   --muted: #64748b;
-  --line: rgba(15, 23, 42, 0.08);
+  --line: rgba(15, 23, 42, 0.1);
   --accent: #ffd208;
+  --accent-hover: #f2c500;
   --accent-soft: #fff4b8;
   --accent-ink: #3b2f00;
   --success: #059669;
   --success-soft: #d1fae5;
-  --shadow-hi: rgba(0, 0, 0, 0.02);
-  --shadow-lo: rgba(0, 0, 0, 0.04);
+  --shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
 }
 
 * {
   box-sizing: border-box;
-  border-radius: 0 !important;
 }
 
 html,
@@ -29,6 +28,39 @@ body {
   background: var(--bg);
   color: var(--copy);
   font-family: var(--font-geist-sans), sans-serif;
+}
+
+body {
+  background:
+    linear-gradient(180deg, rgba(255, 210, 8, 0.08), transparent 22rem),
+    var(--bg);
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display), var(--font-geist-sans), sans-serif;
+  letter-spacing: -0.025em;
+}
+
+button,
+a,
+input,
+textarea {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button,
+a {
+  outline-offset: 3px;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid rgba(255, 210, 8, 0.55);
+  outline-offset: 2px;
 }
 
 a {
