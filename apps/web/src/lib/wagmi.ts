@@ -4,6 +4,8 @@ import { createConfig, http, injected } from "wagmi";
 import { supportedChains } from "../config/chains";
 
 export const wagmiConfig = createConfig({
+  ssr: true,
+  multiInjectedProviderDiscovery: true,
   chains: supportedChains,
   connectors: [injected()],
   transports: {
