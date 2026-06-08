@@ -5,7 +5,6 @@
   "scripts": {
     "clean": "rimraf ./artifacts ./cache ./coverage ./types ./dist",
     "compile": "cross-env TS_NODE_TRANSPILE_ONLY=true hardhat compile",
-    "postcompile": "cross-env TS_NODE_TRANSPILE_ONLY=true hardhat typechain",
     "test": "hardhat test",
     "node": "hardhat node",
     "deploy:local": "hardhat run scripts/deploy.ts --network hardhat",

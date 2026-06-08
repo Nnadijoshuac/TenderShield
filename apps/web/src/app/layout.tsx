@@ -2,8 +2,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Geist, Space_Grotesk } from "next/font/google";
 import { ConnectWalletButton } from "../components/ConnectWalletButton";
-import { Providers } from "./providers";
 import "./globals.css";
+import { Providers } from "./providers";
+
+
 
 const bodyFont = Geist({ subsets: ["latin"], variable: "--font-geist-sans" });
 const displayFont = Space_Grotesk({ subsets: ["latin"], variable: "--font-display" });
