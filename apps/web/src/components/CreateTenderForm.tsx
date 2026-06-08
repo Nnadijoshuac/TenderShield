@@ -32,6 +32,7 @@ export function CreateTenderForm() {
     if (!addresses.tenderFactory || !formValid) return;
 
     writeContract({
+      chainId: addresses.chainId,
       address: addresses.tenderFactory,
       abi: tenderFactoryAbi,
       functionName: "createTender",

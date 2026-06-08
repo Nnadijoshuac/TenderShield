@@ -21,7 +21,7 @@ interface TenderInfo {
 
 export default function DashboardPage() {
   const { address } = useAccount();
-  const publicClient = usePublicClient();
+  const publicClient = usePublicClient({ chainId: addresses.chainId });
   const [tenders, setTenders] = useState<TenderInfo[]>([]);
   const [loading, setLoading] = useState(true);
   const [mounted, setMounted] = useState(false);

@@ -2,13 +2,14 @@
 
 import { useState } from "react";
 import { useAccount, usePublicClient, useWaitForTransactionReceipt, useWriteContract } from "wagmi";
+import { addresses } from "../config/addresses";
 import { reverseTenderAbi } from "../lib/contracts";
 import { encryptBid } from "../lib/fhe";
 import { TransactionToast } from "./TransactionToast";
 
 export function SubmitBidForm({ tenderAddress, isOpen }: { tenderAddress: `0x${string}`; isOpen: boolean }) {
   const { address } = useAccount();
-  const publicClient = usePublicClient();
+  const publicClient = usePublicClient({ chainId: addresses.chainId });
   const [bidAmount, setBidAmount] = useState("350");
   const [message, setMessage] = useState<string>();
   const { writeContractAsync, data: hash } = useWriteContract();
@@ -22,6 +23,7 @@ export function SubmitBidForm({ tenderAddress, isOpen }: { tenderAddress: `0x${s
     setMessage("Submitting encrypted bid onchain...");
 
     await writeContractAsync({
+      chainId: addresses.chainId,
       address: tenderAddress,
       abi: reverseTenderAbi,
       functionName: "submitBid",
