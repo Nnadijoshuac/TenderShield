@@ -5,6 +5,7 @@ const nextConfig: NextConfig = {
   typedRoutes: true,
   outputFileTracingRoot: path.join(__dirname, "../.."),
   webpack(config) {
+    config.parallelism = 1;
     config.resolve.alias = {
       ...config.resolve.alias,
       "@react-native-async-storage/async-storage": false,
