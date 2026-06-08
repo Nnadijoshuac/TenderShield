@@ -8,10 +8,11 @@ import { TenderStatusBadge } from "../../../components/TenderStatusBadge";
 import { addresses } from "../../../config/addresses";
 import { reverseTenderAbi } from "../../../lib/contracts";
 import { formatDateTime, shortAddress } from "../../../lib/format";
+import { createSepoliaTransport } from "../../../lib/rpc";
 
 async function getTenderState(address: `0x${string}`) {
   const chain = addresses.chainId === 11155111 ? sepolia : hardhat;
-  const transport = addresses.chainId === 11155111 ? http("https://ethereum-sepolia-rpc.publicnode.com") : http("http://127.0.0.1:8545");
+  const transport = addresses.chainId === 11155111 ? createSepoliaTransport() : http("http://127.0.0.1:8545");
   const publicClient = createPublicClient({ chain, transport });
 
   const summary = await publicClient.multicall({

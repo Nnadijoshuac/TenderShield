@@ -1,6 +1,7 @@
 import { SepoliaConfig, createInstance, initSDK, type PublicDecryptResults } from "@zama-fhe/relayer-sdk/web";
 import { bytesToHex, type PublicClient } from "viem";
 import { addresses } from "../config/addresses";
+import { getSepoliaRpcUrl } from "./rpc";
 
 let fheInstancePromise: ReturnType<typeof createInstance> | null = null;
 let sdkReadyPromise: Promise<boolean> | null = null;
@@ -44,7 +45,7 @@ export async function initFhevm(publicClient: PublicClient) {
   if (!fheInstancePromise) {
     fheInstancePromise = createInstance(
       addresses.chainId === 11155111
-        ? { ...SepoliaConfig, relayerUrl: addresses.relayerUrl, network: publicClient.transport.url ?? "https://ethereum-sepolia-rpc.publicnode.com" }
+        ? { ...SepoliaConfig, relayerUrl: addresses.relayerUrl, network: getSepoliaRpcUrl() }
         : getCustomConfig(publicClient),
     );
   }
