@@ -1,14 +1,10 @@
 import Link from "next/link";
 import { ArrowRight, Lock, CheckCircle2, Code2 } from "lucide-react";
-import { DecorativeBoxes } from "../components/DecorativeBoxes";
 
 export default function HomePage() {
   return (
     <div className="relative space-y-16">
-      <DecorativeBoxes pattern="outsideTop" className="opacity-75" />
-      <DecorativeBoxes pattern="outsideSide" className="opacity-60" />
       <section className="relative border border-slate-200 bg-white px-8 py-20">
-        <DecorativeBoxes pattern="corner" />
         <div className="max-w-3xl">
           <div className="mb-6">
             <span className="inline-block px-3 py-1 rounded-full bg-[color:var(--accent-soft)] text-[color:var(--accent-ink)] text-sm font-semibold">
@@ -56,7 +52,6 @@ export default function HomePage() {
           }
         ].map((feature, i) => (
           <div key={i} className="relative border border-slate-200 bg-slate-50 p-6 hover:bg-slate-100 transition">
-            <DecorativeBoxes pattern={i % 2 === 0 ? "edge" : "scatter"} className="opacity-45" />
             <feature.icon className="w-8 h-8 text-[color:var(--accent-ink)] mb-4" />
             <h3 className="text-lg font-bold mb-2 text-slate-900">{feature.title}</h3>
             <p className="text-slate-600 text-sm leading-relaxed">{feature.desc}</p>
@@ -65,7 +60,6 @@ export default function HomePage() {
       </section>
 
       <section className="relative border border-slate-200 bg-slate-50 p-8 sm:p-12">
-        <DecorativeBoxes pattern="corner" className="opacity-70" />
         <h2 className="text-3xl font-bold mb-8 text-slate-900">How Cipher Works</h2>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           {[
@@ -89,7 +83,6 @@ export default function HomePage() {
       </section>
 
       <section className="relative border border-slate-200 bg-white p-8 sm:p-12">
-        <DecorativeBoxes pattern="scatter" className="opacity-65" />
         <h2 className="text-2xl font-bold mb-6 text-slate-900">Why Cipher Matters</h2>
         <div className="space-y-4">
           <p className="text-slate-600 leading-relaxed">

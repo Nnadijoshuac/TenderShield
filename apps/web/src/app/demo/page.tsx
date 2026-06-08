@@ -1,5 +1,4 @@
 import { Play, Lock, Check } from "lucide-react";
-import { DecorativeBoxes } from "../../components/DecorativeBoxes";
 
 const steps = [
   "Connect issuer wallet and create a new encryption round.",
@@ -13,10 +12,7 @@ const steps = [
 export default function DemoPage() {
   return (
     <div className="relative grid gap-8 lg:grid-cols-[1.1fr,0.9fr]">
-      <DecorativeBoxes pattern="outsideTop" className="opacity-70" />
-      <DecorativeBoxes pattern="outsideSide" className="opacity-55" />
       <section className="relative border border-slate-200 bg-slate-50 p-8">
-        <DecorativeBoxes pattern="corner" className="opacity-70" />
         <div className="flex items-center gap-2 mb-4">
           <Play className="w-5 h-5 text-[color:var(--accent-ink)]" />
           <span className="text-xs font-semibold text-[color:var(--accent-ink)] uppercase tracking-widest">Walkthrough</span>
@@ -26,7 +22,6 @@ export default function DemoPage() {
         <div className="space-y-4">
           {steps.map((step, index) => (
             <div key={step} className="relative border border-slate-200 bg-white p-5 hover:bg-slate-100 transition">
-              {index % 2 === 0 && <DecorativeBoxes pattern="edge" className="opacity-40" />}
               <div className="flex items-start gap-4">
                 <div className="flex-shrink-0 w-8 h-8 rounded-full bg-[color:var(--accent)] flex items-center justify-center text-[color:var(--accent-ink)] font-bold text-sm">
                   {index + 1}
@@ -40,7 +35,6 @@ export default function DemoPage() {
 
       <section className="space-y-6">
         <div className="relative border border-slate-200 bg-slate-50 p-8">
-          <DecorativeBoxes pattern="scatter" className="opacity-60" />
           <h2 className="text-2xl font-bold text-slate-900 mb-6">Example Scenario</h2>
           <div className="space-y-4 text-sm">
             <div className="p-4 rounded-lg bg-white border border-slate-200">
@@ -64,7 +58,6 @@ export default function DemoPage() {
         </div>
 
         <div className="relative border border-slate-200 bg-slate-50 p-8">
-          <DecorativeBoxes pattern="edge" className="opacity-60" />
           <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
             <Lock className="w-4 h-4 text-[color:var(--accent-ink)]" />
             Privacy Guarantee
