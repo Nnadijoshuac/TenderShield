@@ -56,11 +56,12 @@ export async function POST(request: Request) {
       ],
     });
 
-    return NextResponse.json({ gas: ((estimatedGas * 120n) / 100n).toString() });
+    return NextResponse.json({ gas: ((estimatedGas * 105n) / 100n).toString() });
   } catch (error) {
     console.error("Tender gas estimation failed:", error);
+    const errorMessage = error instanceof Error ? error.message : String(error);
     return NextResponse.json(
-      { error: "Unable to prepare the transaction through Sepolia. Please retry shortly." },
+      { error: "Unable to estimate gas. The Sepolia RPC is temporarily unavailable. Please retry in a moment." },
       { status: 503 },
     );
   }

@@ -21,6 +21,8 @@ async function getTenderState(address: `0x${string}`) {
       { address, abi: reverseTenderAbi, functionName: "title" },
       { address, abi: reverseTenderAbi, functionName: "descriptionURI" },
       { address, abi: reverseTenderAbi, functionName: "deadline" },
+      { address, abi: reverseTenderAbi, functionName: "bidBond" },
+      { address, abi: reverseTenderAbi, functionName: "maxBudget" },
       { address, abi: reverseTenderAbi, functionName: "closed" },
       { address, abi: reverseTenderAbi, functionName: "revealRequested" },
       { address, abi: reverseTenderAbi, functionName: "finalized" },
@@ -31,7 +33,7 @@ async function getTenderState(address: `0x${string}`) {
     allowFailure: false,
   });
 
-  const [issuer, title, descriptionURI, deadline, closed, revealRequested, finalized, bidCount, winner, winningBid] = summary;
+  const [issuer, title, descriptionURI, deadline, bidBond, maxBudget, closed, revealRequested, finalized, bidCount, winner, winningBid] = summary;
 
   const bids =
     Number(bidCount) === 0
@@ -46,7 +48,7 @@ async function getTenderState(address: `0x${string}`) {
           allowFailure: false,
         });
 
-  return { issuer, title, descriptionURI, deadline, closed, revealRequested, finalized, bidCount, winner, winningBid, bids };
+  return { issuer, title, descriptionURI, deadline, bidBond, maxBudget, closed, revealRequested, finalized, bidCount, winner, winningBid, bids };
 }
 
 export default async function EncryptionDetailPage({ params }: { params: Promise<{ address: string }> }) {
@@ -69,10 +71,12 @@ export default async function EncryptionDetailPage({ params }: { params: Promise
             </div>
             <TenderStatusBadge closed={encryption.closed} revealRequested={encryption.revealRequested} finalized={encryption.finalized} />
           </div>
-          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {[
               { label: "Issuer", value: shortAddress(encryption.issuer) },
               { label: "Deadline", value: formatDateTime(encryption.deadline) },
+              { label: "Bid Bond Required", value: encryption.bidBond.toString() },
+              { label: "Budget Ceiling", value: encryption.maxBudget.toString() },
               { label: "Bids Received", value: encryption.bidCount.toString() },
               { label: "Status", value: encryption.finalized ? "Revealed" : "Encrypted" }
             ].map((item, i) => (

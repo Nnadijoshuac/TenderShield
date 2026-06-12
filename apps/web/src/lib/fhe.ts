@@ -1,3 +1,5 @@
+"use client";
+
 import { SepoliaConfig, createInstance, initSDK, type PublicDecryptResults } from "@zama-fhe/relayer-sdk/web";
 import { bytesToHex, type PublicClient } from "viem";
 import { addresses } from "../config/addresses";
