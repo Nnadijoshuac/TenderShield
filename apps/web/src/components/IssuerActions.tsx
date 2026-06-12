@@ -58,25 +58,25 @@ export function IssuerActions({
   }
 
   return (
-    <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-      <h2 className="mb-1 text-lg font-bold text-slate-900">Issuer actions</h2>
-      <p className="mb-5 text-sm text-[color:var(--muted)]">Progress the tender through closing, reveal, and finalization.</p>
-      <div className="grid gap-3 sm:grid-cols-3">
-        <button disabled={!canClose} onClick={closeTender} className="rounded-xl border border-[color:var(--accent)] bg-[color:var(--accent)] px-4 py-3 text-sm font-semibold text-[color:var(--accent-ink)] transition hover:bg-[color:var(--accent-hover)] disabled:cursor-not-allowed disabled:opacity-40">
-          Close Tender
+    <div className="rounded-lg border border-slate-200 p-5">
+      <h2 className="font-bold text-slate-900 mb-1">Issuer actions</h2>
+      <p className="text-sm text-slate-600 mb-4">Progress through closing, reveal, and finalization.</p>
+      <div className="grid gap-2 sm:grid-cols-3 mb-3">
+        <button disabled={!canClose} onClick={closeTender} className="rounded-lg border border-[color:var(--accent)] bg-[color:var(--accent)] px-4 py-2 text-sm font-semibold text-[color:var(--accent-ink)] transition hover:bg-[color:var(--accent-hover)] disabled:cursor-not-allowed disabled:opacity-40">
+          Close
         </button>
-        <button disabled={!canReveal} onClick={requestReveal} className="rounded-xl border border-[color:var(--accent)] bg-[color:var(--accent)] px-4 py-3 text-sm font-semibold text-[color:var(--accent-ink)] transition hover:bg-[color:var(--accent-hover)] disabled:cursor-not-allowed disabled:opacity-40">
+        <button disabled={!canReveal} onClick={requestReveal} className="rounded-lg border border-[color:var(--accent)] bg-[color:var(--accent)] px-4 py-2 text-sm font-semibold text-[color:var(--accent-ink)] transition hover:bg-[color:var(--accent-hover)] disabled:cursor-not-allowed disabled:opacity-40">
           Reveal
         </button>
-        <button disabled={!canFinalize} onClick={finalizeTender} className="rounded-xl border border-[color:var(--accent)] bg-[color:var(--accent)] px-4 py-3 text-sm font-semibold text-[color:var(--accent-ink)] transition hover:bg-[color:var(--accent-hover)] disabled:cursor-not-allowed disabled:opacity-40">
+        <button disabled={!canFinalize} onClick={finalizeTender} className="rounded-lg border border-[color:var(--accent)] bg-[color:var(--accent)] px-4 py-2 text-sm font-semibold text-[color:var(--accent-ink)] transition hover:bg-[color:var(--accent-hover)] disabled:cursor-not-allowed disabled:opacity-40">
           Finalize
         </button>
       </div>
-      <div className="mt-4 flex flex-wrap gap-3">
-        <button onClick={() => writeContractAsync({ chain: sepolia, chainId: addresses.chainId, address: tenderAddress, abi: reverseTenderAbi, functionName: "claimRefund" })} className="rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm font-medium text-slate-700 transition hover:border-yellow-300 hover:bg-[color:var(--panel)]">
+      <div className="flex flex-wrap gap-2">
+        <button onClick={() => writeContractAsync({ chain: sepolia, chainId: addresses.chainId, address: tenderAddress, abi: reverseTenderAbi, functionName: "claimRefund" })} className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-medium text-slate-700 transition hover:bg-slate-50">
           Claim refund
         </button>
-        <button onClick={() => writeContractAsync({ chain: sepolia, chainId: addresses.chainId, address: tenderAddress, abi: reverseTenderAbi, functionName: "claimAward" })} className="rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm font-medium text-slate-700 transition hover:border-yellow-300 hover:bg-[color:var(--panel)]">
+        <button onClick={() => writeContractAsync({ chain: sepolia, chainId: addresses.chainId, address: tenderAddress, abi: reverseTenderAbi, functionName: "claimAward" })} className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-medium text-slate-700 transition hover:bg-slate-50">
           Claim award
         </button>
       </div>

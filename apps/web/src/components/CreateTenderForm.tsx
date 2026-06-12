@@ -98,21 +98,21 @@ export function CreateTenderForm() {
   }
 
   return (
-    <form onSubmit={onSubmit} className="space-y-8">
-      <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
-        <div className="mb-8">
+    <form onSubmit={onSubmit} className="space-y-6">
+      <div className="space-y-6 rounded-lg border border-slate-200 p-6 sm:p-8">
+        <div>
           <label htmlFor="title" className="mb-2 block text-sm font-semibold text-slate-900">Procurement title *</label>
           <input id="title" type="text" value={title} onChange={(event) => setTitle(event.target.value)} placeholder="e.g. Procurement for 50 laptops" className={inputClassName} required />
           <p className="mt-2 text-xs text-slate-500">A clear title for your procurement round.</p>
         </div>
 
-        <div className="mb-8">
+        <div>
           <label htmlFor="description" className="mb-2 block text-sm font-semibold text-slate-900">Description *</label>
           <textarea id="description" value={description} onChange={(event) => setDescription(event.target.value)} placeholder="Describe the specifications and requirements..." rows={4} className={`${inputClassName} resize-none`} required />
           <p className="mt-2 text-xs text-slate-500">Include the details suppliers need to prepare a bid.</p>
         </div>
 
-        <div className="mb-8">
+        <div>
           <label htmlFor="deadline" className="mb-2 block text-sm font-semibold text-slate-900">Bid deadline *</label>
           <input id="deadline" type="datetime-local" value={deadline} onChange={(event) => setDeadline(event.target.value)} className={inputClassName} required />
           <p className="mt-2 text-xs text-slate-500">Bidding closes at this date and time.</p>
