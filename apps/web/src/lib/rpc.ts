@@ -1,14 +1,8 @@
 import { fallback, http } from "viem";
 
 const publicSepoliaRpcUrls = [
-  "https://rpc.sepolia.org",
-  "https://ethereum-sepolia-rpc.publicnode.com",
-  "https://1rpc.io/sepolia",
-  "https://sepolia-rpc.lighthouse.io",
   "https://sepolia.drpc.org",
-  "https://eth-sepolia.g.alchemy.com/v2/demo",
-  "https://eth-sepolia.public.blastapi.io",
-  "https://endpoints.omnirpc.io/v1/sepolia",
+  "https://ethereum-sepolia-rpc.publicnode.com",
 ] as const;
 
 export function getSepoliaRpcUrls() {
@@ -26,14 +20,14 @@ export function createSepoliaTransport() {
   return fallback(
     getSepoliaRpcUrls().map((url) =>
       http(url, {
-        retryCount: 5,
+        retryCount: 1,
         retryDelay: 500,
-        timeout: 45_000,
+        timeout: 20_000,
       }),
     ),
     {
       rank: true,
-      retryCount: 3,
+      retryCount: 1,
     },
   );
 }

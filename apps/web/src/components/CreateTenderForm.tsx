@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { sepolia } from "viem/chains";
-import { useAccount, usePublicClient, useWaitForTransactionReceipt, useWriteContract } from "wagmi";
+import { useAccount, useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import { addresses } from "../config/addresses";
 import { tenderFactoryAbi } from "../lib/contracts";
 import { TransactionToast } from "./TransactionToast";
@@ -16,7 +16,6 @@ const inputClassName =
 export function CreateTenderForm() {
   const router = useRouter();
   const { address } = useAccount();
-  const publicClient = usePublicClient({ chainId: addresses.chainId });
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [deadline, setDeadline] = useState("");
@@ -33,36 +32,36 @@ export function CreateTenderForm() {
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!addresses.tenderFactory || !address || !publicClient || !formValid) return;
+    if (!addresses.tenderFactory || !address || !formValid) return;
 
     setPrepareError(undefined);
     setIsPreparing(true);
+    const deadlineTimestamp = BigInt(Math.floor(new Date(deadline).getTime() / 1000));
     const args = [
       title,
       description,
-      BigInt(Math.floor(new Date(deadline).getTime() / 1000)),
+      deadlineTimestamp,
       BigInt(Number(bidBond)),
       BigInt(Number(maxBudget)),
       (addresses.tenderToken ?? "0x0000000000000000000000000000000000000000") as `0x${string}`,
     ] as const;
 
     try {
-      let gasLimit: bigint | undefined;
-      
-      if (publicClient) {
-        try {
-          const estimatedGas = await publicClient.estimateContractGas({
-            account: address,
-            address: addresses.tenderFactory,
-            abi: tenderFactoryAbi,
-            functionName: "createTender",
-            args,
-          });
-          gasLimit = (estimatedGas * 120n) / 100n;
-        } catch (gasError) {
-          console.warn("Gas estimation failed, proceeding without pre-estimated gas:", gasError);
-          // Continue without gas estimation - Wagmi will estimate it
-        }
+      const estimateResponse = await fetch("/api/tenders/estimate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          account: address,
+          title,
+          description,
+          deadline: deadlineTimestamp.toString(),
+          bidBond,
+          maxBudget,
+        }),
+      });
+      const estimate = (await estimateResponse.json()) as { gas?: string; error?: string };
+      if (!estimateResponse.ok || !estimate.gas) {
+        throw new Error(estimate.error ?? "Unable to prepare the transaction.");
       }
 
       await writeContractAsync({
@@ -72,7 +71,7 @@ export function CreateTenderForm() {
         abi: tenderFactoryAbi,
         functionName: "createTender",
         args,
-        ...(gasLimit && { gas: gasLimit }),
+        gas: BigInt(estimate.gas),
       });
     } catch (submissionError) {
       setPrepareError(formatSubmissionError(submissionError));
